@@ -1,0 +1,76 @@
+#root {
+    -fx-font-family: Consolas;
+}
+
+.top-panel {
+    /*
+    -fx-background-color : linear-gradient(to bottom,
+        rgba(206,220,231,1) 0%, rgba(128,153,163,1) 100%);
+    -fx-background-insets: 0;
+    */
+}
+
+#users_horizon {
+    -fx-background-color: none;
+    -fx-border-width    : 0;
+}
+
+.message-row {
+    -fx-font-family: Consolas;
+    -fx-font-size  : 11pt;
+}
+
+.message-date {
+    -fx-min-width  : 75;
+}
+
+.message-source {
+	-fx-min-width  : 74;
+	-fx-font-weight: bold;
+}
+
+.metal-button {
+    -fx-padding: 4 10;
+    /*
+    -fx-background-color : silver, linear-gradient(to bottom,
+        rgba(245,246,246,1) 0%, rgba(219,220,226,1) 21%,
+        rgba(211,214,226,1) 49%, rgba(221,223,227,1) 80%,
+        rgba(245,246,246,1) 100%);
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 20, 19;
+    */
+    -fx-cursor           : HAND;
+    /*-fx-font-weight      : bold;*/
+    -fx-font-size        : 9pt;
+}
+
+.status-power {
+    /*-fx-text-fill: rgb(128, 0, 128);*/
+    -fx-font-weight: bold;
+}
+
+.right-column {
+    -fx-background-color: none;
+    -fx-border-width    : 0;
+}
+
+TaskTile {
+    -fx-padding: 8.0;
+    -fx-spacing: 4.0;
+
+    -fx-background-color : silver, white;
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 4, 4;
+}
+
+TaskTile Label {
+    -fx-font-size  : 12pt;
+    -fx-font-weight: bold;
+}
+
+.task-button {
+    -fx-padding         : 0;
+    -fx-background-color: none;
+    -fx-border-width    : 0;
+    -fx-cursor          : HAND;
+}
