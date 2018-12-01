@@ -156,14 +156,8 @@ public class MainSceneListener extends AbsSceneListener
                      author = manager.getSharedContext ().getConfigStorage ()
                             . get ("login").orElse ("[user name]");
         final LocalDateTime time = LocalDateTime.now ();
-        final boolean isUser   = manager.getUsersService ().isUser (dialog),
-                      isPublic = dialog.equals ("public");
-        final String recipient = isUser 
-                               ? dialog 
-                               : (isPublic ? "" : dialog);
-        final MessageAccess access = isUser 
-                                   ? PRIVATE 
-                                   : (isPublic ? PUBLIC : ROOM_PRIVATE);
+        final MessageAccess access = currentConversation.getAccess ();
+        final String recipient = access.equals (PUBLIC) ? "" : dialog;
         
         MessageEntity message = new MessageEntity (dialog, id, 
                        time, author, recipient, body, access);

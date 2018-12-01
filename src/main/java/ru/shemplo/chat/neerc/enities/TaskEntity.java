@@ -23,7 +23,7 @@ public class TaskEntity {
     
     public static enum TaskType { TODO, TODOFAIL, CONFIRM, OKFAIL, QUESTION }
     
-    public static enum TaskStatus { NONE, RUNNING, SUCCESS, FAIL }
+    public static enum TaskStatus { NONE, RUNNING, SUCCESS, FAIL, ACKNOWLEDGED } // fixed by @egormkn
     
     @NonNull private final String        id;
     @NonNull private       TaskType      type;
