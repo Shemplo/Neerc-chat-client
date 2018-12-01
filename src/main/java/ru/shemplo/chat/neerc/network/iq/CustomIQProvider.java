@@ -35,15 +35,15 @@ public class CustomIQProvider extends IQProvider <AbsCustomIQ> {
     }
     
     public String prepareNamespace () {
-        final String host = configStorage.get ("host").orElse ("localhost");
-        return String.format ("http://neerc.ifmo.ru/protocol/neerc", host);
+        final String domain = configStorage.get ("domain").orElse ("localhost");
+        return String.format ("http://neerc.ifmo.ru/protocol/neerc", domain);
     }
     
     public Jid prepareNamespaceJid () {
-        final String host = configStorage.get ("host").orElse ("localhost"),
+        final String domain = configStorage.get ("domain").orElse ("localhost"),
                      room = configStorage.get ("room").orElse ("neerc");
         return JidCreate.fromOrThrowUnchecked (
-            String.format ("%s@neerc.%s", room, host));
+            String.format ("%s@neerc.%s", room, domain));
     }
     
     public void query (String query) {

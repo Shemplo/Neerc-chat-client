@@ -13,7 +13,6 @@
 dependency*
 properties*
 
-*.jar
 *.db
 *.iml
 *.jks

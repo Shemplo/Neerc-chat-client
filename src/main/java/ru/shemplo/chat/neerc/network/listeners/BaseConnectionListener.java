@@ -107,7 +107,7 @@ public final class BaseConnectionListener extends AbstractConnectionListener {
         try {
             final Resourcepart resourcepart = Resourcepart.from (login);
             chat.join (chat.getEnterConfigurationBuilder (resourcepart)
-                           .requestMaxStanzasHistory (1000)
+                           .requestMaxStanzasHistory (100)
                            .withPassword ("")
                            .build ());
             Arrays.asList ("users", "tasks")

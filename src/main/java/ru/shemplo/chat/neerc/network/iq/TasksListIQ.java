@@ -29,6 +29,7 @@ public class TasksListIQ extends AbsCustomIQ {
             if (tag.F.equals ("task")) {
                 tasks.add (TaskEntity.fromMap (tag.S));
             } else if (tag.F.equals ("status")) {
+                tag.S.putIfAbsent ("value", "");
                 tasks.get (tasks.size () - 1)
                 . addStatus (tag.S);
             }

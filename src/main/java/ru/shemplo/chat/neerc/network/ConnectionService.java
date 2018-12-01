@@ -112,10 +112,10 @@ public class ConnectionService {
     }
     
     public EntityBareJid prepareEntityJid () {
-        final String host = configStorage.get ("host").orElse ("localhost"),
-                     room = configStorage.get ("room").orElse ("neerc");
+        final String domain = configStorage.get ("domain").orElse ("localhost"),
+                     room   = configStorage.get ("room").orElse ("neerc");
         return JidCreate.entityBareFromOrThrowUnchecked (
-            String.format ("%s@conference.%s", room, host));
+            String.format ("%s@conference.%s", room, domain));
     }
     
     public void connect () throws IOException, InterruptedException, 
