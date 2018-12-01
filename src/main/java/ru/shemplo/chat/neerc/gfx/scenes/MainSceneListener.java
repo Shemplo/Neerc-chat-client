@@ -144,6 +144,11 @@ public class MainSceneListener extends AbsSceneListener
         attach.setCursor (Cursor.HAND);
     }
     
+    public void setInInputArea (String value) {
+        TextArea input = SceneComponent.INPUT.get (scene);
+        Platform.runLater (() -> input.setText (value));
+    }
+    
     private void sendMessage (String body) {
         ClientAdapter adapter = manager.getSharedContext ().getClientAdapter ();
         final String dialog = currentConversation.getDialog (),

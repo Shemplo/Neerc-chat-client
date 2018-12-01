@@ -127,10 +127,23 @@ public class MessageInterpreter {
     }
     
     private void _makeDefaultMessage (Pane container, MessageEntity message) {
-        final String body = message.getBody (), ident = "(\\w|_|-)+";
+        String tmpBody = message.getBody (), ident = "(\\w|_|-)+";
         final Pattern emojiPattern 
             = Pattern.compile (String.format (":%s:", ident));
         final Insets insets = new Insets (0, 8, 0, 0);
+        
+        int number = 0;
+        while (tmpBody.charAt (number) == '!') { number++; }
+        
+        String tmpApplyingStyleClass = "";
+        if (number > 0) {
+            tmpApplyingStyleClass = "red-message";
+            tmpBody = tmpBody.substring (number);
+        }
+        
+        final String applyingStyleClass = tmpApplyingStyleClass,
+                     body               = tmpBody;
+        final double fontSizeAddition   = number + (number > 0 ? 3 : 0);
         
         Arrays.asList (body.split ("\\n")).forEach (line -> {
             TextFlow box = new TextFlow ();
@@ -163,6 +176,12 @@ public class MessageInterpreter {
                 } else {
                     Arrays.asList (token.split ("\\s")).forEach (word -> {
                         Label label = new Label (word);
+                        if (fontSizeAddition > 0) {
+                            double fontSize = label.getFont ().getSize () + fontSizeAddition;
+                            label.setStyle (String.format ("-fx-font-size: %.0f", fontSize));                            
+                        }
+                        
+                        label.getStyleClass ().add (applyingStyleClass);
                         label.setPadding (insets);
                         
                         box.getChildren ().add (label);

@@ -4,13 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.jivesoftware.smack.packet.IQ;
@@ -91,11 +85,10 @@ public class DefaultPacketRouter extends AbsPacketRouter {
                tmpWisper = "";
         
         final int angle = tmpBody.indexOf (">");
-        if (tmpBody.matches ("\\%\\w+>.*")) {     // like "%bot> connect"
-            tmpRoom  = tmpBody.split (">") [0]
-                     . substring (1);
+        if (tmpBody.matches ("\\%\\w+>(.|\\n)+")) {     // like "%bot> connect"
+            tmpRoom  = tmpBody.substring (1, angle);
             tmpBody = tmpBody.substring (angle + 1);
-        } else if (tmpBody.matches ("\\w+>.*")) { // like "hall1> Hello"
+        } else if (tmpBody.matches ("\\w+>(.|\\n)+")) { // like "hall1> Hello"
             tmpWisper = tmpBody.split (">") [0];
             tmpBody = tmpBody.substring (angle + 1);
         }

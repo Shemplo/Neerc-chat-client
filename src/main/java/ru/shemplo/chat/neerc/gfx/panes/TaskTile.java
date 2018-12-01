@@ -54,6 +54,7 @@ public class TaskTile extends VBox {
         Label title = new Label (task.getTitle ());
         HBox.setHgrow (title, Priority.ALWAYS);
         firstLine.getChildren ().add (title);
+        title.setWrapText (true);
         
         HBox secondLine = new HBox (8.0);
         secondLine.setAlignment (Pos.CENTER_LEFT);

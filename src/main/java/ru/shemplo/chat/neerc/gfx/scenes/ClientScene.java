@@ -1,15 +1,12 @@
 package ru.shemplo.chat.neerc.gfx.scenes;
 
-import java.util.function.BiFunction;
-
 import java.io.IOException;
-
 import java.net.URL;
+import java.util.function.BiFunction;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

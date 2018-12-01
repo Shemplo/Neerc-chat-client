@@ -1,5 +1,7 @@
 package ru.shemplo.chat.neerc.gfx.panes;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.time.format.DateTimeFormatter;
 
 import javafx.geometry.Insets;
@@ -9,6 +11,7 @@ import javafx.scene.layout.HBox;
 import ru.shemplo.chat.neerc.config.SharedContext;
 import ru.shemplo.chat.neerc.enities.MessageEntity;
 import ru.shemplo.chat.neerc.gfx.WindowManager;
+import ru.shemplo.chat.neerc.gfx.scenes.SceneListener;
 
 public class MessageRow extends HBox {
     
@@ -17,7 +20,7 @@ public class MessageRow extends HBox {
     private final MessageInterpreter messageInterpreter;
     private SharedContext sharedContext;
     
-    public MessageRow (MessageEntity message) {
+    public MessageRow (SceneListener listener, MessageEntity message) {
         try {
             this.sharedContext = WindowManager.getInstance ()
                                . getSharedContext ();
@@ -40,11 +43,19 @@ public class MessageRow extends HBox {
         }
         source.setTextFill   (sharedContext.getUsersService ()
                               . getColorForName (author));
-        source.getStyleClass ().add ("message-source");
-        source.setAlignment  (Pos.CENTER_RIGHT);
-        getChildren ().add   (source);
+        source.getStyleClass  ().add ("message-source");
+        source.setAlignment   (Pos.CENTER_RIGHT);
+        getChildren ().addAll (source, messageInterpreter
+                                       . interpret (message));
         
-        getChildren ().add (messageInterpreter.interpret (message));
+        setOnMouseClicked (me -> {
+            if (me.getClickCount () != 2) { return; }
+            final String value = message.getBody ();
+            
+            StringSelection string = new StringSelection  (value);
+            Toolkit.getDefaultToolkit ().getSystemClipboard ()
+            . setContents (string, string);
+        });
     }
     
 }

@@ -1,16 +1,14 @@
 package ru.shemplo.chat.neerc.config;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import ru.shemplo.snowball.annot.Cooler;
 import ru.shemplo.snowball.annot.Snowflake;

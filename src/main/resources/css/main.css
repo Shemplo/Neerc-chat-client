@@ -44,6 +44,11 @@
     -fx-font-size        : 9pt;
 }
 
+.red-message {
+    -fx-text-fill  : red;
+    -fx-font-weight: bold;
+}
+
 .status-power {
     /*-fx-text-fill: rgb(128, 0, 128);*/
     -fx-font-weight: bold;

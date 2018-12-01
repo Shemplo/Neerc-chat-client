@@ -100,7 +100,7 @@ public class Conversation extends VBox implements MessageHistoryListener {
                 unread.addAndGet (m.isRead () ? 0 : 1);
             })
             . peek    (cache::add)
-            . map     (MessageRow::new)
+            . map     (m -> new MessageRow (listener, m))
             . forEach (rows.getChildren ()::add);
             
             if (unread.get () > 0) {

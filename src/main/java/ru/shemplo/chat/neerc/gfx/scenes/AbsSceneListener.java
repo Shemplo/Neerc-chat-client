@@ -16,7 +16,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import lombok.Getter;
 import ru.shemplo.chat.neerc.config.ConfigStorage;
 import ru.shemplo.chat.neerc.gfx.WindowManager;
