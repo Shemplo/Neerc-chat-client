@@ -1,13 +1,18 @@
 package ru.shemplo.chat.neerc.network;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+import org.jivesoftware.smack.util.StringUtils;
+
 import ru.shemplo.chat.neerc.config.ConfigStorage;
+import ru.shemplo.chat.neerc.enities.MessageEntity;
 import ru.shemplo.chat.neerc.enities.TaskEntity;
+import ru.shemplo.chat.neerc.enities.MessageEntity.MessageAccess;
 import ru.shemplo.chat.neerc.network.iq.CustomIQProvider;
 import ru.shemplo.chat.neerc.network.listeners.TasksStatusListener;
 import ru.shemplo.snowball.annot.Cooler;
@@ -22,6 +27,7 @@ public class TasksService {
     }
     
     @Init private CustomIQProvider customIQProvider;
+    @Init private MessageService messageService;
     @Init private ConfigStorage configStorage;
     
     private final Object STUB_OBJECT = new Object ();
@@ -46,17 +52,34 @@ public class TasksService {
                           . collect (Collectors.toSet ()));
         keep.retainAll (this.tasks.keySet ());
         keys.stream ().filter (k -> !keep.contains (k))
-            .forEach (this.tasks::remove);
+            .forEach (k -> {
+                MessageEntity message = prepareMessage ("", "deleted", 
+                                      this.tasks.get (k).getTitle ());
+                messageService.addMessage (message);
+                this.tasks.remove (k);
+            });
         
         AtomicBoolean hasJustAssignedTask = new AtomicBoolean (false);
         tasks.forEach (task -> {
             this.tasks.compute (task.getId (), (k, v) -> {
                 if (v == null) {
+                    MessageEntity message = prepareMessage ("", 
+                                  "created", task.getTitle ());
+                    messageService.addMessage (message);
+                    
                     hasJustAssignedTask.set (true);
                     return task;
                 }
                 
                 if (v.getStatuses ().size () == 0) {
+                    final String user = configStorage.get ("login")
+                                      . orElse ("[user name]");
+                    task.getStatusFor (user).ifPresent (__ -> {                        
+                        MessageEntity message = prepareMessage ("!!", 
+                                "assigned to you", task.getTitle ());
+                        messageService.addMessage (message);
+                    });
+                    
                     hasJustAssignedTask.set (true);
                 }
                 
@@ -74,6 +97,19 @@ public class TasksService {
                     lis.onTaskUpdated (task.getId ()));
             });
         }
+    }
+    
+    private final MessageEntity prepareMessage (String level, String action, String title) {
+        final String ID        = StringUtils.randomString (16),
+                author    = "tk", // technical (k)committee
+                recipient = configStorage.get ("login").orElse ("[user name]"),
+                body      = String.format ("%sTask was %s: %s", 
+                                           level, action, title);
+        final LocalDateTime time   = LocalDateTime.now ();
+        final MessageAccess access = MessageAccess.ROOM_PRIVATE;
+        MessageEntity message = new MessageEntity ("tasks", ID, 
+                        time, author, recipient, body, access);
+        return message;
     }
     
     public Collection <TaskEntity> getActualTasksFor (String name) {
