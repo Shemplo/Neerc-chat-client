@@ -34,9 +34,8 @@ public class CustomIQProvider extends IQProvider <AbsCustomIQ> {
         ProviderManager.addIQProvider ("query", namespace.concat ("#tasks"), this);
     }
     
-    public String prepareNamespace () {
-        final String domain = configStorage.get ("domain").orElse ("localhost");
-        return String.format ("http://neerc.ifmo.ru/protocol/neerc", domain);
+    public static String prepareNamespace () {
+        return "http://neerc.ifmo.ru/protocol/neerc";
     }
     
     public Jid prepareNamespaceJid () {

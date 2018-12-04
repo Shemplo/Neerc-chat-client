@@ -10,6 +10,13 @@
     */
 }
 
+ListView .scroll-bar:horizontal .increment-arrow,
+ListView .scroll-bar:horizontal .decrement-arrow,
+ListView .scroll-bar:horizontal .increment-button,
+ListView .scroll-bar:horizontal .decrement-button {
+    -fx-padding:0;
+}
+
 #users_horizon {
     -fx-background-color: none;
     -fx-border-width    : 0;
@@ -25,7 +32,8 @@
 }
 
 .message-source {
-	-fx-min-width  : 74;
+	-fx-min-width  : 84;
+    -fx-font-size  : 10pt;
 	-fx-font-weight: bold;
 }
 

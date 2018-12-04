@@ -25,4 +25,6 @@ public @interface MessageRouteDestination {
     
     boolean roomExpectation () default true;
     
+    String body () default "(.|\\n)*";
+    
 }

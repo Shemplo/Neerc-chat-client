@@ -29,6 +29,7 @@ public class TasksService {
     @Init private CustomIQProvider customIQProvider;
     @Init private MessageService messageService;
     @Init private ConfigStorage configStorage;
+    @Init private UsersService usersService;
     
     private final Object STUB_OBJECT = new Object ();
     private final ConcurrentMap <TasksStatusListener, Object> 
@@ -101,7 +102,7 @@ public class TasksService {
     
     private final MessageEntity prepareMessage (String level, String action, String title) {
         final String ID        = StringUtils.randomString (16),
-                author    = "tk", // technical (k)committee
+                author    = usersService.isUser ("tk") ? "tk" : "tc", // technical committee
                 recipient = configStorage.get ("login").orElse ("[user name]"),
                 body      = String.format ("%sTask was %s: %s", 
                                            level, action, title);

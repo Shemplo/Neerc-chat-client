@@ -1,10 +1,9 @@
 package ru.shemplo.chat.neerc.gfx.panes;
 
-import static javafx.scene.layout.Priority.*;
 import static ru.shemplo.chat.neerc.enities.MessageEntity.MessageAccess.*;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -12,17 +11,18 @@ import java.util.stream.Collectors;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import ru.shemplo.chat.neerc.enities.MessageEntity;
@@ -30,28 +30,29 @@ import ru.shemplo.chat.neerc.enities.MessageEntity.MessageAccess;
 import ru.shemplo.chat.neerc.gfx.scenes.MainSceneListener;
 import ru.shemplo.chat.neerc.gfx.scenes.SceneListener;
 import ru.shemplo.chat.neerc.network.MessageService;
-import ru.shemplo.chat.neerc.network.listeners.MessageHistoryListener;
+import ru.shemplo.chat.neerc.network.listeners.MessageListener;
 
-public class Conversation extends VBox implements MessageHistoryListener {
+@EqualsAndHashCode (callSuper = false, exclude = {"unread", "input", 
+                    "access", "messagesView"})
+public class Conversation extends VBox implements MessageListener {
     
     @Getter protected boolean sendingMessageEnable;
-    protected final Set <String> listeningDialogs;
     @Getter protected final String dialog;
     protected final AtomicInteger unread;
-    protected final ScrollPane scroller;
-    protected final VBox rows;
     
-    protected final MessageService messageHistory;
+    protected final Set <String> bufferIDs = new HashSet <> ();
+    protected final ListView <MessageEntity> messagesView;
+    protected final ObservableList <MessageEntity> buffer;
+    protected final MessageService messageService;
     protected final MainSceneListener listener;
-    private final Set <MessageEntity> cache;
     
     @Getter private MessageAccess access = PUBLIC;
     @Getter @Setter private String input = "";
     
     public Conversation (SceneListener listener, String dialog) {
+        this.buffer = FXCollections.observableArrayList ();
         this.listener = (MainSceneListener) listener;
         this.sendingMessageEnable = true;
-        this.cache = new HashSet <> ();
         
         this.unread = new AtomicInteger (0);
         this.dialog = dialog;
@@ -66,7 +67,7 @@ public class Conversation extends VBox implements MessageHistoryListener {
             toolbar.getChildren ().add (labelAboutType);
             
             final boolean isUser   = listener.getManager ().getUsersService ().isUser (dialog),
-                    isPublic = dialog.equals ("public");
+                          isPublic = dialog.equals ("public");
             final MessageAccess access = isUser ? PRIVATE : (isPublic ? PUBLIC : ROOM_PRIVATE);
             
             ChoiceBox <String> dialogType = new ChoiceBox <> ();
@@ -75,7 +76,7 @@ public class Conversation extends VBox implements MessageHistoryListener {
                             Arrays.asList (MessageAccess.values ()).stream ()
                             . map     (MessageAccess::getDisplayName)
                             . collect (Collectors.toList ())
-                            )
+                        )
                     );
             dialogType.getSelectionModel ().selectedIndexProperty ()
                     .addListener ((all, down, up) -> {
@@ -85,63 +86,43 @@ public class Conversation extends VBox implements MessageHistoryListener {
             toolbar.getChildren ().add (dialogType);
         }
         
-        this.rows = new VBox ();
-        rows.setSpacing (4);
+        this.messagesView = new ListView <> ();
+        messagesView.setCellFactory (__ -> new MessageCell ());
+        messagesView.setBackground (Background.EMPTY);
+        VBox.setVgrow (messagesView, Priority.ALWAYS);
+        messagesView.editableProperty ().set (false);
+        getChildren ().add (messagesView);
+        messagesView.setItems (buffer);
         
-        this.scroller = new ScrollPane (rows);
-        scroller.setVbarPolicy (ScrollBarPolicy.AS_NEEDED);
-        scroller.setHbarPolicy (ScrollBarPolicy.NEVER);
-        scroller.setFitToWidth (true);
-        scroller.setBackground (Background.EMPTY);
-        scroller.setBorder (Border.EMPTY);
-        setVgrow (scroller, ALWAYS);
-        scroller.setVvalue (1.0d);
-        
-        getChildren ().add (scroller);
-        
-        this.listeningDialogs = new HashSet <> ();
-        listeningDialogs.add (dialog);
-        this.messageHistory = listener
-                . getManager        ()
-                . getSharedContext  ()
-                . getMessageHistory ();
-        messageHistory.subscribe (this);
+        this.messageService = listener
+                            . getManager        ()
+                            . getSharedContext  ()
+                            . getMessageHistory ();
+        messageService.subscribe (this);
     }
     
     public void onResponsibleTabOpened (Tab owner) {
-        if (unread.get () > 0) {            
-            Platform.runLater (() -> { scroller.setVvalue (1.0d); });
+        if (unread.get () > 0) {
             Platform.runLater (() -> owner.setText (dialog));
-            cache.forEach (m -> m.setRead (true));
+            final LocalDateTime now = LocalDateTime.now ();
+            messageService.markAsReadUntil (dialog, now);
             unread.set (0);
         }
     }
     
     @Override
-    public Set <String> getListeningDialogsName () { return listeningDialogs; }
-
-    @Override
-    public void onDialogUpdated (String dialog) {
+    public boolean onAdded (MessageEntity message) {
+        if (!message.getDialog ().equals (dialog)) { return false; }
+        
         Platform.runLater (() -> {
-            Collection <MessageEntity> messages = messageHistory
-                                                . getMessagesInDialog (dialog);
-            Set <MessageEntity> setOfIncome = new HashSet <> (messages);
-            setOfIncome.retainAll (cache);
-            
-            if (setOfIncome.size () != cache.size ()) { // something was deleted
-                rows.getChildren ().clear ();
-                cache.clear ();
+            if (!bufferIDs.contains (message.getID ())) {                
+                bufferIDs.add (message.getID ());
+                buffer.add (message);
+                
+                if (!listener.getCurrentConversation ().equals (this)) {
+                    unread.incrementAndGet ();
+                }
             }
-            
-            messages.stream ()
-            . filter  (m -> !cache.contains (m))
-            . peek    (m -> {
-                if (listener.getCurrentConversation ().equals (this)) { return; }
-                unread.addAndGet (m.isRead () ? 0 : 1);
-            })
-            . peek    (cache::add)
-            . map     (m -> new MessageRow (listener, m))
-            . forEach (rows.getChildren ()::add);
             
             if (unread.get () > 0) {
                 final Tab owner = listener.getOrCreateAndGetTabFor (dialog, this);
@@ -149,10 +130,12 @@ public class Conversation extends VBox implements MessageHistoryListener {
             }
         });
         
-        if (scroller.getVvalue () >= 0.95d) {
-            try { Thread.sleep (50); } catch (InterruptedException ie) {}
-            Platform.runLater (() -> { scroller.setVvalue (1.0d); });
-        }
+        return true;
+    }
+    
+    @Override
+    public boolean onDeleted (String id) {
+        return true;
     }
     
 }

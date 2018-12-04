@@ -9,6 +9,7 @@ import ru.shemplo.chat.neerc.gfx.panes.MessageInterpreter;
 import ru.shemplo.chat.neerc.network.MessageService;
 import ru.shemplo.chat.neerc.network.TasksService;
 import ru.shemplo.chat.neerc.network.UsersService;
+import ru.shemplo.chat.neerc.network.exten.CustomExtensionProvider;
 import ru.shemplo.chat.neerc.network.iq.CustomIQProvider;
 import ru.shemplo.snowball.annot.Cooler;
 import ru.shemplo.snowball.annot.Init;
@@ -21,6 +22,7 @@ public class SharedContext {
         return new SharedContext ();
     }
     
+    @Getter @Init private CustomExtensionProvider customExtensionProvider;
     @Getter @Init private ConnectionListener connectionListener;
     @Getter @Init private MessageInterpreter messageInterpreter;
     @Getter @Init private CustomIQProvider customIQProvider;

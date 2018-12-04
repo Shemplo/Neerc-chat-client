@@ -7,6 +7,8 @@ import java.util.Objects;
 
 import org.jivesoftware.smack.ConnectionListener;
 
+import com.sun.javafx.util.Logging;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Parent;
@@ -24,9 +26,10 @@ import ru.shemplo.chat.neerc.gfx.scenes.SceneListener;
 import ru.shemplo.chat.neerc.network.TasksService;
 import ru.shemplo.chat.neerc.network.UsersService;
 import ru.shemplo.chat.neerc.network.listeners.*;
+import sun.util.logging.PlatformLogger.Level;
 
 public class WindowManager extends Application 
-    implements ConnectionStatusListener, UserPresenceListener,
+    implements ConnectionStatusListener, UserPresenceListener, 
         TasksStatusListener {
 
     private static volatile WindowManager instance;
@@ -93,6 +96,7 @@ public class WindowManager extends Application
         stage.show ();
         
         stage.setOnCloseRequest (__ -> sharedContext.getClientAdapter ().performCloseConnection ());
+        Logging.getCSSLogger ().setLevel (Level.OFF);
     }
     
     @Getter private volatile boolean initialized = false;
@@ -148,6 +152,7 @@ public class WindowManager extends Application
         }
     }
 
+    //@Override
     @Override
     public void onUserChangedPresence (String user, OnlineStatus status) {
         Arrays.asList (ClientScene.values ())

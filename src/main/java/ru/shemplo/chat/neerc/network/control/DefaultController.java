@@ -4,8 +4,6 @@ import static ru.shemplo.chat.neerc.enities.MessageEntity.MessageAccess.*;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import ru.shemplo.chat.neerc.annot.DestinationValue;
 import ru.shemplo.chat.neerc.annot.IQRouteDestination;
@@ -78,18 +76,25 @@ public class DefaultController {
         }
     }
     
-    private final Pattern TASK_ID = Pattern.compile ("\\(((\\w|-)+)\\)");
-    
-    @MessageRouteDestination (namespace = "neerc\\..+", room = "")
+    @MessageRouteDestination (namespace = "neerc\\..+", room = "", body = ".+\\((\\w|-)+\\).+")
     public void controllTaskChangeMessage (
             @DestinationValue ("body")   String        body,
             @DestinationValue ("time")   LocalDateTime time,
             @DestinationValue ("author") String        author,
             @DestinationValue ("id")     String        id) {
         //System.out.println (String.format ("public `%s: %s`", author, body));
-        Matcher matcher = TASK_ID.matcher (body);
-        if (!matcher.find ()) { return; }
         customIQProvider.query ("tasks");
+    }
+    
+    @MessageRouteDestination (namespace = "neerc\\..+", room = "", body = ".+clock.+")
+    public void controllClockSynchronization (
+            @DestinationValue ("body")    String        body,
+            @DestinationValue ("time")    LocalDateTime time,
+            @DestinationValue ("author")  String        author,
+            @DestinationValue ("id")      String        id,
+            @DestinationValue ("message") Object        message) {
+        //System.out.println (String.format ("public `%s: %s`", author, body));
+        System.out.println (message + " " + body);
     }
     
     @MessageRouteDestination (namespace = "conference\\..+", room = "neerc", roomExpectation = false)

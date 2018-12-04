@@ -13,7 +13,6 @@ import afester.javafx.svg.SvgLoader;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -37,7 +36,7 @@ public class MessageInterpreter {
     
     @Init private UsersService usersService;
     
-    public final Node interpret (MessageEntity message) {
+    public final Pane interpret (MessageEntity message) {
         VBox lines = new VBox ();
         HBox.setHgrow (lines, Priority.ALWAYS);
         
@@ -47,7 +46,7 @@ public class MessageInterpreter {
             flow.setLineSpacing (4.0);
             
             _makePressenceMessageBody (flow, entity);
-            lines.getChildren ().add (flow);
+            lines.getChildren ().add  (flow);
         } else { _makeDefaultMessage (lines, message); }
         
         return lines;

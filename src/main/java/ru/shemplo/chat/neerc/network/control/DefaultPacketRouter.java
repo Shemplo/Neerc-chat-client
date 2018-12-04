@@ -104,6 +104,7 @@ public class DefaultPacketRouter extends AbsPacketRouter {
                                      . filter (p -> namespace.matches (p.S.namespace ()))
                                      . filter (p -> p.S.wisper () != (wisper.isEmpty ()))
                                      . filter (p -> author.matches (p.S.author ()))
+                                     . filter (p -> body.matches (p.S.body ()))
                                      . map (p -> p.F)
                                      . findFirst ();
         

@@ -228,9 +228,16 @@ public class MainSceneListener extends AbsSceneListener
         });
     }
     
-    private void onTabClosed (Event event) {
+    private synchronized void onTabClosed (Event event) {
         Tab source = (Tab) event.getSource ();
-        openedTabs.remove (source.getText ());
+        
+        String key = source.getText ();
+        if (source.getContent () instanceof Conversation) {
+            Conversation conversation = (Conversation) source.getContent ();
+            key = conversation.getDialog ();
+        }
+        
+        openedTabs.remove (key);
     }
     
     private void onUserButtonClick (MouseEvent me) {
