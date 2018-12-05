@@ -119,7 +119,8 @@ public class Conversation extends VBox implements MessageListener {
                 bufferIDs.add (message.getID ());
                 buffer.add (message);
                 
-                if (!listener.getCurrentConversation ().equals (this)) {
+                if (!listener.getCurrentConversation ()
+                             .equals (this)) {
                     unread.incrementAndGet ();
                 }
             }

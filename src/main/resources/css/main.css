@@ -10,6 +10,10 @@
     */
 }
 
+ListView .list-cell:filled:selected .label {
+    -fx-text-fill: inherit;
+}
+
 ListView .scroll-bar:horizontal .increment-arrow,
 ListView .scroll-bar:horizontal .decrement-arrow,
 ListView .scroll-bar:horizontal .increment-button,
@@ -65,6 +69,14 @@ ListView .scroll-bar:horizontal .decrement-button {
 .right-column {
     -fx-background-color: none;
     -fx-border-width    : 0;
+}
+
+#clock_horizon {
+    -fx-font-size: 10.5pt;
+}
+
+.clockHorizonSeparator {
+    -fx-font-weight: bold;
 }
 
 TaskTile {

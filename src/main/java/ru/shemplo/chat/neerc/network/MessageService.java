@@ -1,6 +1,7 @@
 package ru.shemplo.chat.neerc.network;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.Queue;
 import java.util.Set;
@@ -11,10 +12,12 @@ import java.util.stream.Collectors;
 
 import ru.shemplo.chat.neerc.enities.MessageEntity;
 import ru.shemplo.chat.neerc.gfx.ClientAdapter;
+import ru.shemplo.chat.neerc.network.exten.ClockExtension.ClockStatus;
 import ru.shemplo.chat.neerc.network.listeners.MessageListener;
 import ru.shemplo.snowball.annot.Cooler;
 import ru.shemplo.snowball.annot.Init;
 import ru.shemplo.snowball.annot.Snowflake;
+import ru.shemplo.snowball.stuctures.Trio;
 
 @Snowflake
 public class MessageService {
@@ -68,5 +71,22 @@ public class MessageService {
         . forEach (e -> e.setRead (true));
     }
     
+    private volatile LocalDateTime clockUpdated = LocalDateTime.now ();
+    private volatile ClockStatus status = ClockStatus.OVER;
+    private volatile long time = 0, total = 0;
+    
+    public void synchronizeClock (long time, long total, ClockStatus clockStatus) {
+        this.time = time / 1000; this.total = total / 1000;
+        this.status = status;
+        
+        clockUpdated = LocalDateTime.now ();
+    }
+    
+    public Trio <Long, Long, ClockStatus> getInfoAboutClock () {
+        long delta = LocalDateTime.now ().toEpochSecond (ZoneOffset.UTC) 
+                   - clockUpdated.toEpochSecond (ZoneOffset.UTC);
+        if (!ClockStatus.RUNNING.equals (status)) { delta = 0; }
+        return Trio.mt (time + delta, total, status);
+    }
     
 }

@@ -24,7 +24,11 @@ public enum SceneComponent implements SceneContainer {
     SMILE  ("smile"),
     ATTACH ("attach"),
     
-    TASKS_SCROLL ("tasks_horizon"),
+    CLOCK_TIME   ("clock_time"),
+    CLOCK_TOTAL  ("clock_total"),
+    CLOCK_STATUS ("clock_status"),
+    
+    TASKS_SCROLL ("tasks_column"),
     TASKS        ("tasks");
     
     @Getter private final String id;

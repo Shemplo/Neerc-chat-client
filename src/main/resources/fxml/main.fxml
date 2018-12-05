@@ -16,6 +16,7 @@
 
 <?import javafx.scene.control.TextArea?>
 
+<?import javafx.scene.control.Separator?>
 <StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
            minHeight="500"
            fx:id="root">
@@ -100,11 +101,27 @@
                 </HBox>
             </VBox>
             <VBox minWidth="350">
+                <HBox spacing="4"
+                      fx:id="clock_horizon">
+                    <padding>
+                        <Insets top="8" right="8" bottom="8" left="8"/>
+                    </padding>
+                    <Label text="Clock: "
+                           styleClass="clockHorizonSeparator"/>
+                    <Label fx:id="clock_time"/>
+                    <Label text="/"
+                           styleClass="clockHorizonSeparator"/>
+                    <Label fx:id="clock_total"/>
+                    <Label text="-"
+                           styleClass="clockHorizonSeparator"/>
+                    <Label fx:id="clock_status"/>
+                </HBox>
+                <Separator/>
                 <ScrollPane VBox.vgrow="ALWAYS"
                             fitToWidth="true"
                             hbarPolicy="NEVER"
                             styleClass="right-column"
-                            fx:id="tasks_horizon"
+                            fx:id="tasks_column"
                             pannable="true">
                     <VBox spacing="8"
                           fx:id="tasks">

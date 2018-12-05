@@ -1,12 +1,11 @@
 package ru.shemplo.chat.neerc.gfx.scenes;
 
+import static java.time.ZoneOffset.*;
 import static ru.shemplo.chat.neerc.enities.MessageEntity.MessageAccess.*;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
@@ -14,7 +13,10 @@ import java.util.stream.Stream;
 
 import org.jivesoftware.smack.util.StringUtils;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -27,6 +29,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import lombok.Getter;
 import ru.shemplo.chat.neerc.enities.MessageEntity;
 import ru.shemplo.chat.neerc.enities.MessageEntity.MessageAccess;
@@ -40,10 +43,12 @@ import ru.shemplo.chat.neerc.gfx.panes.TaskTile;
 import ru.shemplo.chat.neerc.gfx.panes.TasksConversation;
 import ru.shemplo.chat.neerc.network.TasksService;
 import ru.shemplo.chat.neerc.network.UsersService;
+import ru.shemplo.chat.neerc.network.exten.ClockExtension.ClockStatus;
 import ru.shemplo.chat.neerc.network.listeners.ConnectionStatusListener;
 import ru.shemplo.chat.neerc.network.listeners.TasksStatusListener;
 import ru.shemplo.chat.neerc.network.listeners.UserPresenceListener;
 import ru.shemplo.snowball.stuctures.Pair;
+import ru.shemplo.snowball.stuctures.Trio;
 
 public class MainSceneListener extends AbsSceneListener 
     implements ConnectionStatusListener, UserPresenceListener, 
@@ -142,6 +147,32 @@ public class MainSceneListener extends AbsSceneListener
         Button attach = SceneComponent.ATTACH.get (scene);
         attach.setBackground (Background.EMPTY);
         attach.setCursor (Cursor.HAND);
+        
+        Timeline clockLineUpdator = new Timeline (
+            new KeyFrame (Duration.ZERO, this::updateClockLine),
+            new KeyFrame (Duration.seconds (1)));
+        clockLineUpdator.setCycleCount (Timeline.INDEFINITE);
+        clockLineUpdator.playFromStart ();
+    }
+    
+    private void updateClockLine (ActionEvent actionEvent) {
+        Trio <Long, Long, ClockStatus> info = manager.getSharedContext ()
+                                            . getMessageHistory ()
+                                            . getInfoAboutClock ();
+        Optional.ofNullable (SceneComponent.CLOCK_TIME.<Label> get (scene))
+                .ifPresent (label -> {
+            LocalDateTime time = LocalDateTime.ofEpochSecond (info.F, 0, UTC);
+            label.setText (time.format (DateTimeFormatter.ISO_LOCAL_TIME));
+        });
+        Optional.ofNullable (SceneComponent.CLOCK_TOTAL.<Label> get (scene))
+                .ifPresent (label -> {
+            LocalDateTime time = LocalDateTime.ofEpochSecond (info.S, 0, UTC);
+            label.setText (time.format (DateTimeFormatter.ISO_LOCAL_TIME));
+        });
+        Optional.ofNullable (SceneComponent.CLOCK_STATUS.<Label> get (scene))
+                .ifPresent (label -> {
+            label.setText (String.format ("(%s)", info.T));
+        });
     }
     
     public void setInInputArea (String value) {

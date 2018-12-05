@@ -5,6 +5,8 @@ import static ru.shemplo.chat.neerc.enities.MessageEntity.MessageAccess.*;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import org.jivesoftware.smack.packet.Message;
+
 import ru.shemplo.chat.neerc.annot.DestinationValue;
 import ru.shemplo.chat.neerc.annot.IQRouteDestination;
 import ru.shemplo.chat.neerc.annot.MessageRouteDestination;
@@ -16,6 +18,7 @@ import ru.shemplo.chat.neerc.gfx.ClientAdapter;
 import ru.shemplo.chat.neerc.network.MessageService;
 import ru.shemplo.chat.neerc.network.TasksService;
 import ru.shemplo.chat.neerc.network.UsersService;
+import ru.shemplo.chat.neerc.network.exten.ClockExtension;
 import ru.shemplo.chat.neerc.network.iq.CustomIQProvider;
 import ru.shemplo.chat.neerc.network.iq.TasksListIQ;
 import ru.shemplo.chat.neerc.network.iq.UsersListIQ;
@@ -31,7 +34,7 @@ public class DefaultController {
     }
     
     @Init private CustomIQProvider customIQProvider;
-    @Init private MessageService messageHistory;
+    @Init private MessageService messageService;
     @Init private ClientAdapter clientAdapter;
     @Init private ConfigStorage configStorage;
     @Init private TasksService tasksService;
@@ -47,7 +50,7 @@ public class DefaultController {
         final String login = configStorage.get ("login").get ();
         MessageEntity message = new MessageEntity ("public", id, time, 
                                          author, login, body, PUBLIC);
-        messageHistory.addMessage (message);
+        messageService.addMessage (message);
     }
     
     @MessageRouteDestination (namespace = "conference\\..+", room = "neerc", wisper = true)
@@ -64,15 +67,15 @@ public class DefaultController {
         if (login.equals (author)) { // private message from local user
             MessageEntity message = new MessageEntity (recipient, id, time, 
                                              author, login, body, PRIVATE);
-            messageHistory.addMessage (message);
+            messageService.addMessage (message);
         } else if (login.equals (recipient)) { // private message to local user
             MessageEntity message = new MessageEntity (author, id, time, 
                                       author, recipient, body, PRIVATE);            
-            messageHistory.addMessage (message);
+            messageService.addMessage (message);
         } else if (spy.isPresent () && spy.get ()) {
             MessageEntity message = new MessageEntity ("spy", id, time, 
                                      author, recipient, body, PRIVATE);            
-            messageHistory.addMessage (message);            
+            messageService.addMessage (message);            
         }
     }
     
@@ -86,15 +89,16 @@ public class DefaultController {
         customIQProvider.query ("tasks");
     }
     
+    private static final ClockExtension clockDummy = new ClockExtension ();
+    
     @MessageRouteDestination (namespace = "neerc\\..+", room = "", body = ".+clock.+")
     public void controllClockSynchronization (
-            @DestinationValue ("body")    String        body,
             @DestinationValue ("time")    LocalDateTime time,
-            @DestinationValue ("author")  String        author,
-            @DestinationValue ("id")      String        id,
-            @DestinationValue ("message") Object        message) {
-        //System.out.println (String.format ("public `%s: %s`", author, body));
-        System.out.println (message + " " + body);
+            @DestinationValue ("message") Message       message) {
+        ClockExtension clock = message.getExtension (clockDummy.getElementName (), 
+                                                     clockDummy.getNamespace ());
+        messageService.synchronizeClock (clock.getTime (), clock.getTotal (), 
+                                                         clock.getStatus ());
     }
     
     @MessageRouteDestination (namespace = "conference\\..+", room = "neerc", roomExpectation = false)
@@ -106,7 +110,7 @@ public class DefaultController {
             @DestinationValue ("id")     String        id) {
         //System.out.println (String.format ("public `%s: %s`", author, body));
         MessageEntity message = new MessageEntity (room, id, time, author, room, body, ROOM_PRIVATE);
-        messageHistory.addMessage (message);
+        messageService.addMessage (message);
     }
     
     @PresenceRouteDestination (namespace = "conference\\..+", room = ".*")
