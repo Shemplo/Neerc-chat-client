@@ -31,6 +31,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import lombok.Getter;
+import lombok.Setter;
 import ru.shemplo.chat.neerc.enities.MessageEntity;
 import ru.shemplo.chat.neerc.enities.MessageEntity.MessageAccess;
 import ru.shemplo.chat.neerc.enities.UserEntity;
@@ -44,6 +45,8 @@ import ru.shemplo.chat.neerc.gfx.panes.TasksConversation;
 import ru.shemplo.chat.neerc.network.TasksService;
 import ru.shemplo.chat.neerc.network.UsersService;
 import ru.shemplo.chat.neerc.network.exten.ClockExtension.ClockStatus;
+import ru.shemplo.chat.neerc.network.exten.editor.EditMessageExtension;
+import ru.shemplo.chat.neerc.network.exten.editor.EditMessageExtension.EditActionType;
 import ru.shemplo.chat.neerc.network.listeners.ConnectionStatusListener;
 import ru.shemplo.chat.neerc.network.listeners.TasksStatusListener;
 import ru.shemplo.chat.neerc.network.listeners.UserPresenceListener;
@@ -181,6 +184,14 @@ public class MainSceneListener extends AbsSceneListener
     }
     
     private void sendMessage (String body) {
+        // XXX: make up it to normal API
+        if (!_messageID.equals ("")) {
+            _sendSpecialMessage (_messageID, body);
+            currentConversation.setInput ("");
+            set_messageID ("");
+            return;
+        }
+        
         ClientAdapter adapter = manager.getSharedContext ().getClientAdapter ();
         final String dialog = currentConversation.getDialog (),
                      id     = StringUtils.randomString (32),
@@ -194,6 +205,15 @@ public class MainSceneListener extends AbsSceneListener
                        time, author, recipient, body, access);
         currentConversation.setInput ("");
         adapter.sendMessage (message);
+    }
+    
+    // XXX: make up it to normal API
+    @Getter @Setter private String _messageID = "";
+    
+    // XXX: make up it to normal API
+    private void _sendSpecialMessage (String id, String body) {
+        EditMessageExtension editMessage = new EditMessageExtension (id, EditActionType.EDIT, body);
+        manager.getSharedContext ().getCustomExtensionProvider ().send (editMessage, "");
     }
 
     @Override

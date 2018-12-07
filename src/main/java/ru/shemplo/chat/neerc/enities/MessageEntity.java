@@ -2,10 +2,7 @@ package ru.shemplo.chat.neerc.enities;
 
 import java.time.LocalDateTime;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Data
 @EqualsAndHashCode (exclude = {"read", "time"})
@@ -23,11 +20,12 @@ public class MessageEntity {
     
     }
     
-    protected final String dialog, ID;
+    protected final String    dialog, 
+                              ID;
     protected final LocalDateTime time;
-    protected final String author,
-                           recipient,
-                           body;
+    protected final String    author,
+                              recipient;
+    @NonNull protected String body;
     protected final MessageAccess access;
     
     protected boolean read;

@@ -40,7 +40,7 @@ public class CustomExtensionProvider extends ExtensionElementProvider <AbsCustom
         // x / http://neerc.ifmo.ru/protocol/neerc#clock
         ProviderManager.addExtensionProvider (clock.getElementName (), 
                                          clock.getNamespace (), this);
-        // edit / http://shemplo.ru/editor/
+        // edition / http://shemplo.ru/edimes#edit
         ProviderManager.addExtensionProvider (edit.getElementName (), 
                                          edit.getNamespace (), this);
     }
@@ -64,7 +64,7 @@ public class CustomExtensionProvider extends ExtensionElementProvider <AbsCustom
         
         try { 
             connectionService.getConnection ().sendStanza (message);
-            System.out.println ("Message is sent: " + message);
+            //System.out.println ("Message is sent: " + message);
         } catch (NotConnectedException | InterruptedException es) {
             new RuntimeException (es);
         }

@@ -52,6 +52,16 @@ public class MessageService {
         }
     }
     
+    public void editMessage (String id, String body) {
+        synchronized (messages) {
+            messages.stream ()
+            . filter  (m -> id.equals (m.getID ()))
+            . forEach (m -> m.setBody (body));
+        }
+        
+        notifyAboutChanges (lis -> lis.onEdited (id));
+    }
+    
     public void deleteMessage (String dialog, String id) {
         if (messages.removeIf (message -> message.getID ().equals (id))) {
             notifyAboutChanges (lis -> lis.onDeleted (id));

@@ -115,7 +115,7 @@ public class Conversation extends VBox implements MessageListener {
         if (!message.getDialog ().equals (dialog)) { return false; }
         
         Platform.runLater (() -> {
-            if (!bufferIDs.contains (message.getID ())) {                
+            if (!bufferIDs.contains (message.getID ())) {
                 bufferIDs.add (message.getID ());
                 buffer.add (message);
                 
@@ -136,6 +136,12 @@ public class Conversation extends VBox implements MessageListener {
     
     @Override
     public boolean onDeleted (String id) {
+        return true;
+    }
+
+    @Override
+    public boolean onEdited (String id) {
+        messagesView.refresh ();
         return true;
     }
     

@@ -59,8 +59,8 @@ public class DefaultController {
         messageService.addMessage (message);
         
         /* for test purposes
-        customExtensionProvider.send (new EditMessageExtension (message.getID (), 
-                EditActionType.EDIT, message.getBody () + " {edited}"), null);
+        customExtensionProvider.send (new EditMessageExtension (id, 
+                EditActionType.EDIT, body + " {edited}"), null);
                 */
     }
     
@@ -122,6 +122,7 @@ public class DefaultController {
         EditMessageExtension edit = message.getExtension (editDummy.getElementName (), 
                                                            editDummy.getNamespace ());
         log.debug ("Body: {}, Extension: {}", message.getBody (), edit.toString ());
+        messageService.editMessage (edit.getMessageID (), edit.getValue ());
     }
     
     @MessageRouteDestination (namespace = "conference\\..+", room = "neerc", roomExpectation = false)
