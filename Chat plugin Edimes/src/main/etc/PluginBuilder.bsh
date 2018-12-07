@@ -1,0 +1,28 @@
+import java.util.jar.JarOutputStream;
+import java.util.jar.Manifest;
+import java.util.zip.ZipEntry;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.Path;
+
+String name = project.getName (), version = project.getVersion ();
+Path config = Paths.get ("src/main/etc/plugin.xml", new String [0]);
+Path plugin = Paths.get (String.format ("target/%s-%s.jar", 
+										new String [] {name, version}), 
+						 new String [0]);
+
+OutputStream os = new FileOutputStream (String.format ("target/plugin-%s-%s.jar",
+												 new String [] {name, version}));
+
+Manifest manifest = new Manifest ();
+manifest.getMainAttributes ().putValue ("Manifest-Version", "1.0");
+
+JarOutputStream jos = new JarOutputStream (os, manifest);
+
+jos.putNextEntry (new ZipEntry (config.getFileName ().toString ()));
+jos.write (Files.readAllBytes (config));
+
+jos.putNextEntry (new ZipEntry ("lib/" + plugin.getFileName ().toString ()));
+jos.write (Files.readAllBytes (plugin));
+
+jos.close ();
