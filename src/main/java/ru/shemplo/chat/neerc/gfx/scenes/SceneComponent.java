@@ -19,6 +19,9 @@ public enum SceneComponent implements SceneContainer {
     
     CONVERSATIONS ("conversations"),
     
+    BUFFER       ("buffer_content"),
+    CLEAR_BUFFER ("clear_buffer"),
+    
     INPUT  ("input"), 
     SEND   ("send"), 
     SMILE  ("smile"),

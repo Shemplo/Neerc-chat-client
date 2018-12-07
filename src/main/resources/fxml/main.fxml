@@ -77,6 +77,20 @@
                          VBox.vgrow="ALWAYS"
                          minHeight="200">
                 </TabPane>
+                <HBox spacing="8.0"
+                      alignment="CENTER_LEFT">
+                    <VBox.margin>
+                        <Insets top="4" right="8" left="8"/>
+                    </VBox.margin>
+                    <Label text="Selected message:"
+                           minWidth="125"/>
+                    <HBox HBox.hgrow="ALWAYS"
+                          alignment="CENTER_LEFT">
+                        <Label fx:id="buffer_content"/>
+                    </HBox>
+                    <Button fx:id="clear_buffer"
+                            text="x"/>
+                </HBox>
                 <HBox spacing="8">
                     <VBox.margin>
                         <Insets top="8" right="8" bottom="8" left="8"/>

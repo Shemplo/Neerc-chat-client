@@ -31,7 +31,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import lombok.Getter;
-import lombok.Setter;
 import ru.shemplo.chat.neerc.enities.MessageEntity;
 import ru.shemplo.chat.neerc.enities.MessageEntity.MessageAccess;
 import ru.shemplo.chat.neerc.enities.UserEntity;
@@ -39,9 +38,7 @@ import ru.shemplo.chat.neerc.enities.UserEntity.OnlineStatus;
 import ru.shemplo.chat.neerc.enities.UserEntity.UserPower;
 import ru.shemplo.chat.neerc.gfx.ClientAdapter;
 import ru.shemplo.chat.neerc.gfx.WindowManager;
-import ru.shemplo.chat.neerc.gfx.panes.Conversation;
-import ru.shemplo.chat.neerc.gfx.panes.TaskTile;
-import ru.shemplo.chat.neerc.gfx.panes.TasksConversation;
+import ru.shemplo.chat.neerc.gfx.panes.*;
 import ru.shemplo.chat.neerc.network.TasksService;
 import ru.shemplo.chat.neerc.network.UsersService;
 import ru.shemplo.chat.neerc.network.exten.ClockExtension.ClockStatus;
@@ -128,6 +125,8 @@ public class MainSceneListener extends AbsSceneListener
         });
         conversations.getSelectionModel ().clearAndSelect (0);
         
+        Button clearBuffer = SceneComponent.CLEAR_BUFFER.get (scene);
+        clearBuffer.setOnMouseClicked (__ -> clearBuffer ());
         
         Button send = SceneComponent.SEND.get (scene);
         send.setGraphic (manager.getSharedContext ().getMessageInterpreter ()
@@ -184,12 +183,9 @@ public class MainSceneListener extends AbsSceneListener
     }
     
     private void sendMessage (String body) {
-        // XXX: make up it to normal API
-        if (!_messageID.equals ("")) {
-            _sendSpecialMessage (_messageID, body);
-            currentConversation.setInput ("");
-            set_messageID ("");
-            return;
+        if (messageBuffer != null) {
+            _sendSpecialMessage (messageBuffer.getID (), body);
+            clearBuffer (); return;
         }
         
         ClientAdapter adapter = manager.getSharedContext ().getClientAdapter ();
@@ -207,10 +203,30 @@ public class MainSceneListener extends AbsSceneListener
         adapter.sendMessage (message);
     }
     
-    // XXX: make up it to normal API
-    @Getter @Setter private String _messageID = "";
+    private volatile MessageEntity messageBuffer;
     
-    // XXX: make up it to normal API
+    public void placeInBuffer (MessageEntity message) {
+        this.messageBuffer = message;
+        Platform.runLater (() -> {
+            Optional.ofNullable (SceneComponent.BUFFER.<Label> get (scene))
+                    .ifPresent (label -> {
+                DateTimeFormatter format = MessageCell.DATE_FORMAT;
+                final String time   = message.getTime ().format (format),
+                             author = message.getAuthor (),
+                             body   = message.getBody ();
+                label.setText (String.format ("%s (%s) %s", time, author, body));
+            });
+        });
+    }
+    
+    private void clearBuffer () {
+        this.messageBuffer = null;
+        Platform.runLater (() -> {
+            Optional.ofNullable (SceneComponent.BUFFER.<Label> get (scene))
+                    .ifPresent (label -> label.setText (""));
+        });
+    }
+    
     private void _sendSpecialMessage (String id, String body) {
         EditMessageExtension editMessage = new EditMessageExtension (id, EditActionType.EDIT, body);
         manager.getSharedContext ().getCustomExtensionProvider ().send (editMessage, "");

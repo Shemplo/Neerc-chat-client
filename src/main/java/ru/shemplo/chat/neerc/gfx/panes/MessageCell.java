@@ -11,13 +11,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import ru.shemplo.chat.neerc.enities.MessageEntity;
 import ru.shemplo.chat.neerc.gfx.WindowManager;
+import ru.shemplo.chat.neerc.gfx.scenes.ClientScene;
 import ru.shemplo.chat.neerc.gfx.scenes.MainSceneListener;
 import ru.shemplo.chat.neerc.network.UsersService;
 
 public class MessageCell extends ListCell <MessageEntity> {
     
     private static WindowManager manager;
-    private static final DateTimeFormatter DATE_FORMAT 
+    public static final DateTimeFormatter DATE_FORMAT 
           = DateTimeFormatter.ofPattern ("HH:mm:ss");
     
     static {
@@ -31,11 +32,9 @@ public class MessageCell extends ListCell <MessageEntity> {
         
         setOnMouseClicked (me -> {
             if (me.getClickCount () == 2) {
-                ((MainSceneListener) manager.getSceneListener ())
-                . set_messageID (getItem ().getID ());
-                
-                System.out.println ("Selected message " + getItem ().getID () 
-                                    + " (" + getItem ().getBody () + ")");
+                MainSceneListener listener = (MainSceneListener) 
+                                ClientScene.MAIN.getListener ();
+                listener.placeInBuffer (getItem ());
             }
         });
     }
