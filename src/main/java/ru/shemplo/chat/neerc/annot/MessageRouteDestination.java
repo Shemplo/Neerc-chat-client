@@ -13,7 +13,7 @@ import org.jivesoftware.smack.packet.Message.Type;
 @Target ({ METHOD })
 public @interface MessageRouteDestination {
     
-    Type meessageType () default Type.groupchat;
+    Type type () default Type.groupchat;
     
     boolean wisper () default false;
     

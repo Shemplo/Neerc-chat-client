@@ -6,7 +6,9 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.packet.Message.Type;
 
+import lombok.extern.slf4j.Slf4j;
 import ru.shemplo.chat.neerc.annot.DestinationValue;
 import ru.shemplo.chat.neerc.annot.IQRouteDestination;
 import ru.shemplo.chat.neerc.annot.MessageRouteDestination;
@@ -19,6 +21,8 @@ import ru.shemplo.chat.neerc.network.MessageService;
 import ru.shemplo.chat.neerc.network.TasksService;
 import ru.shemplo.chat.neerc.network.UsersService;
 import ru.shemplo.chat.neerc.network.exten.ClockExtension;
+import ru.shemplo.chat.neerc.network.exten.CustomExtensionProvider;
+import ru.shemplo.chat.neerc.network.exten.editor.EditMessageExtension;
 import ru.shemplo.chat.neerc.network.iq.CustomIQProvider;
 import ru.shemplo.chat.neerc.network.iq.TasksListIQ;
 import ru.shemplo.chat.neerc.network.iq.UsersListIQ;
@@ -26,6 +30,7 @@ import ru.shemplo.snowball.annot.Cooler;
 import ru.shemplo.snowball.annot.Init;
 import ru.shemplo.snowball.annot.Snowflake;
 
+@Slf4j
 @Snowflake
 public class DefaultController {
     
@@ -33,6 +38,7 @@ public class DefaultController {
         return new DefaultController ();
     }
     
+    @Init private CustomExtensionProvider customExtensionProvider;
     @Init private CustomIQProvider customIQProvider;
     @Init private MessageService messageService;
     @Init private ClientAdapter clientAdapter;
@@ -51,6 +57,11 @@ public class DefaultController {
         MessageEntity message = new MessageEntity ("public", id, time, 
                                          author, login, body, PUBLIC);
         messageService.addMessage (message);
+        
+        /* for test purposes
+        customExtensionProvider.send (new EditMessageExtension (message.getID (), 
+                EditActionType.EDIT, message.getBody () + " {edited}"), null);
+                */
     }
     
     @MessageRouteDestination (namespace = "conference\\..+", room = "neerc", wisper = true)
@@ -89,9 +100,11 @@ public class DefaultController {
         customIQProvider.query ("tasks");
     }
     
+    private static final EditMessageExtension editDummy = new EditMessageExtension ();
     private static final ClockExtension clockDummy = new ClockExtension ();
     
-    @MessageRouteDestination (namespace = "neerc\\..+", room = "", body = ".+clock.+")
+    @MessageRouteDestination (namespace = "neerc\\..+", body = ".+clock.+", 
+                              room = "", type = Type.normal)
     public void controllClockSynchronization (
             @DestinationValue ("time")    LocalDateTime time,
             @DestinationValue ("message") Message       message) {
@@ -99,6 +112,16 @@ public class DefaultController {
                                                      clockDummy.getNamespace ());
         messageService.synchronizeClock (clock.getTime (), clock.getTotal (), 
                                                          clock.getStatus ());
+    }
+    
+    @MessageRouteDestination (namespace = "extens\\.edimes\\..+", room = "neerc", 
+                              body = ".+edited.+", type = Type.groupchat)
+    public void controllMessageEdition (
+            @DestinationValue ("time")    LocalDateTime time,
+            @DestinationValue ("message") Message       message) {
+        EditMessageExtension edit = message.getExtension (editDummy.getElementName (), 
+                                                           editDummy.getNamespace ());
+        log.debug ("Body: {}, Extension: {}", message.getBody (), edit.toString ());
     }
     
     @MessageRouteDestination (namespace = "conference\\..+", room = "neerc", roomExpectation = false)

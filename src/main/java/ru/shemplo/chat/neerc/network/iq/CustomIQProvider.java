@@ -40,7 +40,7 @@ public class CustomIQProvider extends IQProvider <AbsCustomIQ> {
     
     public Jid prepareNamespaceJid () {
         final String domain = configStorage.get ("domain").orElse ("localhost"),
-                     room = configStorage.get ("room").orElse ("neerc");
+                     room   = configStorage.get ("room").orElse ("neerc");
         return JidCreate.fromOrThrowUnchecked (
             String.format ("%s@neerc.%s", room, domain));
     }

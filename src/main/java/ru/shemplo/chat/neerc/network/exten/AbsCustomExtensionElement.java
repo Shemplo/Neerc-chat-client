@@ -11,9 +11,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public abstract class AbsCustomElementExtension implements ExtensionElement {
+public abstract class AbsCustomExtensionElement implements ExtensionElement {
     
-    @Getter private final String namespace, elementName;
+    @Getter private final String namespace, elementName, extension;
     
     @Override
     public CharSequence toXML (String namespace) {

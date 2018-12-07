@@ -8,7 +8,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import org.jivesoftware.smack.packet.IQ;
-import org.jivesoftware.smack.packet.IQ.Type;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.Stanza;
@@ -97,6 +96,7 @@ public class DefaultPacketRouter extends AbsPacketRouter {
         final Class <? extends MessageRouteDestination> routeAnnotation = MessageRouteDestination.class;
         final String room = tmpRoom, wisper = tmpWisper, body = tmpBody;
         final LocalDateTime time = LocalDateTime.now ();
+        final Message.Type type = message.getType ();
         
         Optional <Method> callMethod = ROUTE_METHODS.get (routeAnnotation).stream ()
                                      . map (m -> Pair.mp (m, m.getAnnotation (routeAnnotation)))
@@ -105,6 +105,7 @@ public class DefaultPacketRouter extends AbsPacketRouter {
                                      . filter (p -> p.S.wisper () != (wisper.isEmpty ()))
                                      . filter (p -> author.matches (p.S.author ()))
                                      . filter (p -> body.matches (p.S.body ()))
+                                     . filter (p -> type.equals (p.S.type ()))
                                      . map (p -> p.F)
                                      . findFirst ();
         
@@ -118,6 +119,7 @@ public class DefaultPacketRouter extends AbsPacketRouter {
         values.put ("body", body);
         values.put ("room", room);
         values.put ("time", time);
+        values.put ("type", type);
         
         callMethod (callMethod, values);
     }
@@ -170,7 +172,7 @@ public class DefaultPacketRouter extends AbsPacketRouter {
                      from      = iq.getFrom () == null ? "" : iq.getFrom ().asUnescapedString (),
                      name      = Optional.ofNullable (iq.getChildElementName ()).orElse ("");
         final LocalDateTime time = LocalDateTime.now ();
-        final Type type = iq.getType ();
+        final IQ.Type type = iq.getType ();
         
         final Class <? extends IQRouteDestination> routeAnnotation = IQRouteDestination.class;
         Optional <Method> callMethod = ROUTE_METHODS.get (routeAnnotation).stream ()

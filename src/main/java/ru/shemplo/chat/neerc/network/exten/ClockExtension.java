@@ -1,6 +1,5 @@
 package ru.shemplo.chat.neerc.network.exten;
 
-import static ru.shemplo.chat.neerc.network.exten.CustomExtensionProvider.*;
 import static ru.shemplo.chat.neerc.network.iq.CustomIQProvider.*;
 
 import java.io.IOException;
@@ -11,14 +10,14 @@ import org.xmlpull.v1.XmlPullParserException;
 import lombok.Getter;
 import ru.shemplo.chat.neerc.network.iq.XMLUtils;
 
-public class ClockExtension extends AbsCustomElementExtension {
+public class ClockExtension extends AbsCustomExtensionElement {
 
     public static enum ClockStatus {
-        A, RUNNING, B, OVER
+        BEFORE, PAUSED, RUNNING, OVER
     }
     
     public ClockExtension () {
-        super (String.format ("%s#clock", prepareNamespace ()), "x");
+        super (String.format ("%s#clock", prepareNamespace ()), "x", "neerc");
     }
     
     @Getter private volatile ClockStatus status;
@@ -26,7 +25,7 @@ public class ClockExtension extends AbsCustomElementExtension {
     
     @Override
     public void read (XmlPullParser parser) throws XmlPullParserException, IOException {
-        XMLUtils.parser2Stream (parser, clock.getElementName ())
+        XMLUtils.parser2Stream (parser, getElementName ())
                 .filter  (p -> "clock".equals (p.F))
                 .filter  (p -> !p.S.isEmpty ())
                 .forEach (p -> {
