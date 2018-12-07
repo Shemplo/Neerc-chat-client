@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin>
+    <class>ru.shemplo.chat.neerc.edimes.EdimesPlugin</class>
+    <name>Edimes chat plugin</name>
+    <!-- Shemplo's eXtensions specification -->
+    <description>Additional manipulations with messages (SXS-0001)</description>
+    <author>Andrey (Shemplo) Plotnikov</author>
+    <version>0.0.1</version>    
+</plugin>
