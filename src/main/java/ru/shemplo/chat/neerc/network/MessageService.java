@@ -87,7 +87,7 @@ public class MessageService {
     
     public void synchronizeClock (long time, long total, ClockStatus clockStatus) {
         this.time = time / 1000; this.total = total / 1000;
-        this.status = status;
+        this.status = clockStatus;
         
         clockUpdated = LocalDateTime.now ();
     }

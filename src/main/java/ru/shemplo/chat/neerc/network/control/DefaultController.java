@@ -90,7 +90,8 @@ public class DefaultController {
         }
     }
     
-    @MessageRouteDestination (namespace = "neerc\\..+", room = "", body = ".+\\((\\w|-)+\\).+")
+    @MessageRouteDestination (namespace = "neerc\\..+", body = ".+\\((\\w|-)+\\).+", 
+                              room = "", type = Type.normal)
     public void controllTaskChangeMessage (
             @DestinationValue ("body")   String        body,
             @DestinationValue ("time")   LocalDateTime time,

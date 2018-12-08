@@ -8,12 +8,14 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import lombok.Getter;
+import lombok.ToString;
 import ru.shemplo.chat.neerc.network.iq.XMLUtils;
 
+@ToString
 public class ClockExtension extends AbsCustomExtensionElement {
 
     public static enum ClockStatus {
-        BEFORE, PAUSED, RUNNING, OVER
+        BEFORE, RUNNING, PAUSED, OVER
     }
     
     public ClockExtension () {
