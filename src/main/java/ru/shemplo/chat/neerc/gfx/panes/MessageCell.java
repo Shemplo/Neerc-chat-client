@@ -42,7 +42,10 @@ public class MessageCell extends ListCell <MessageEntity> {
     @Override
     protected void updateItem (MessageEntity item, boolean empty) {
         super.updateItem (item, empty || item == null);
-        if (empty || item == null) { return; }
+        if (empty || item == null) { 
+            setGraphic (null);
+            return; 
+        }
         
         final MessageInterpreter messageInterpreter = manager
             . getSharedContext ().getMessageInterpreter ();

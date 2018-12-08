@@ -298,18 +298,21 @@ public class MainSceneListener extends AbsSceneListener
     private synchronized void onTabClosed (Event event) {
         Tab source = (Tab) event.getSource ();
         
-        String key = source.getText ();
-        if (source.getContent () instanceof Conversation) {
-            Conversation conversation = (Conversation) source.getContent ();
-            key = conversation.getDialog ();
+        synchronized (openedTabs) {
+            String key = source.getText ();
+            if (source.getContent () instanceof Conversation) {
+                Conversation conversation = (Conversation) source.getContent ();
+                key = conversation.getDialog ();
+            }
+            
+            openedTabs.remove (key);
         }
-        
-        openedTabs.remove (key);
     }
     
     private void onUserButtonClick (MouseEvent me) {
         Button source = (Button) me.getSource ();
         final String title = source.getText ();
+        //System.out.println (String.format ("title %s", title));
         Conversation conversation = getOrCreateAndGetConversation (title);
         Tab tab = getOrCreateAndGetTabFor (title, conversation);
         
@@ -339,20 +342,22 @@ public class MainSceneListener extends AbsSceneListener
         return conversation;
     }
     
-    public synchronized Tab getOrCreateAndGetTabFor (String title, Node content) {
-        Tab tab = openedTabs.get (title);
-        if (tab != null) { return tab; }
-        
-        final Tab created = new Tab (title, content);
-        created.setOnClosed (this::onTabClosed);
-        openedTabs.put (title, created);
-        
-        Platform.runLater (() -> {
-            TabPane conversations = SceneComponent.CONVERSATIONS.get (scene);
-            conversations.getTabs ().add (created);
-        });
-        
-        return created;
+    public Tab getOrCreateAndGetTabFor (String title, Node content) {
+        synchronized (openedTabs) {
+            Tab tab = openedTabs.get (title);
+            if (tab != null) { return tab; }
+            
+            final Tab created = new Tab (title, content);
+            created.setOnClosed (this::onTabClosed);
+            openedTabs.putIfAbsent (title, created);
+            
+            Platform.runLater (() -> {
+                TabPane conversations = SceneComponent.CONVERSATIONS.get (scene);
+                conversations.getTabs ().add (created);
+            });
+            
+            return created;
+        }
     }
     
     private final ConcurrentMap <String, TaskTile> 

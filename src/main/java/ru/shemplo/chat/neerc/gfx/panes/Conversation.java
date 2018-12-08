@@ -22,7 +22,6 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import ru.shemplo.chat.neerc.enities.MessageEntity;
@@ -32,8 +31,6 @@ import ru.shemplo.chat.neerc.gfx.scenes.SceneListener;
 import ru.shemplo.chat.neerc.network.MessageService;
 import ru.shemplo.chat.neerc.network.listeners.MessageListener;
 
-@EqualsAndHashCode (callSuper = false, exclude = {"unread", "input", 
-                    "access", "messagesView"})
 public class Conversation extends VBox implements MessageListener {
     
     @Getter protected boolean sendingMessageEnable;
