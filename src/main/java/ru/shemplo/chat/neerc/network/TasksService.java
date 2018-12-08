@@ -63,16 +63,14 @@ public class TasksService {
         AtomicBoolean hasJustAssignedTask = new AtomicBoolean (false);
         tasks.forEach (task -> {
             this.tasks.compute (task.getId (), (k, v) -> {
-                if (v == null) {
+                if (v == null && task.getStatuses ().size () == 0) {
                     MessageEntity message = prepareMessage ("", 
                                   "created", task.getTitle ());
                     messageService.addMessage (message);
                     
                     hasJustAssignedTask.set (true);
                     return task;
-                }
-                
-                if (v.getStatuses ().size () == 0) {
+                } else if (v == null || v.getStatuses ().size () == 0) {
                     final String user = configStorage.get ("login")
                                       . orElse ("[user name]");
                     task.getStatusFor (user).ifPresent (__ -> {                        
