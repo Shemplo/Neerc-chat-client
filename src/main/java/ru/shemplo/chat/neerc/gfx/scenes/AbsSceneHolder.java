@@ -22,7 +22,7 @@ import ru.shemplo.chat.neerc.gfx.WindowManager;
 import ru.shemplo.chat.neerc.network.UsersService;
 import ru.shemplo.chat.neerc.network.listeners.ConnectionStatus;
 
-public abstract class AbsSceneListener implements SceneListener {
+public abstract class AbsSceneHolder implements SceneHolder {
     
     protected static final Random RANDOM = new Random ();
     protected static final int ANIMATION_FRAMES = 100;
@@ -56,7 +56,7 @@ public abstract class AbsSceneListener implements SceneListener {
     
     private Point2D capture = null;
     
-    protected AbsSceneListener (WindowManager manager, Scene scene) {
+    protected AbsSceneHolder (WindowManager manager, Scene scene) {
         this.manager = manager; this.scene = scene;
         
         scene.setOnMousePressed (me -> { capture = new Point2D (me.getSceneX (), me.getSceneY ()); });

@@ -12,7 +12,7 @@ import javafx.scene.layout.Pane;
 import ru.shemplo.chat.neerc.enities.MessageEntity;
 import ru.shemplo.chat.neerc.gfx.WindowManager;
 import ru.shemplo.chat.neerc.gfx.scenes.ClientScene;
-import ru.shemplo.chat.neerc.gfx.scenes.MainSceneListener;
+import ru.shemplo.chat.neerc.gfx.scenes.MainSceneHolder;
 import ru.shemplo.chat.neerc.network.UsersService;
 
 public class MessageCell extends ListCell <MessageEntity> {
@@ -32,9 +32,9 @@ public class MessageCell extends ListCell <MessageEntity> {
         
         setOnMouseClicked (me -> {
             if (me.getClickCount () == 2) {
-                MainSceneListener listener = (MainSceneListener) 
-                                ClientScene.MAIN.getListener ();
-                listener.placeInBuffer (getItem ());
+                MainSceneHolder holder = (MainSceneHolder) 
+                            ClientScene.MAIN.getHolder ();
+                holder.placeInBuffer (getItem ());
             }
         });
     }

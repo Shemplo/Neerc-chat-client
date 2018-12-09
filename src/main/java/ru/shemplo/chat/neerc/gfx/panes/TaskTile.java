@@ -17,14 +17,14 @@ import javafx.scene.layout.VBox;
 import ru.shemplo.chat.neerc.enities.TaskEntity;
 import ru.shemplo.chat.neerc.enities.TaskEntity.TaskStatus;
 import ru.shemplo.chat.neerc.enities.TaskEntity.TaskType;
-import ru.shemplo.chat.neerc.gfx.scenes.SceneListener;
+import ru.shemplo.chat.neerc.gfx.scenes.SceneHolder;
 import ru.shemplo.chat.neerc.network.iq.RequestIQ;
 import ru.shemplo.chat.neerc.network.iq.TaskStatusIQ;
 
 public class TaskTile extends VBox {
     
     private final MessageInterpreter interpreter;
-    private final SceneListener listener;
+    private final SceneHolder listener;
     private final Button status, confirm;
     private final TextField comment;
 
@@ -34,7 +34,7 @@ public class TaskTile extends VBox {
     
     private String beforeTyping;
     
-    public TaskTile (SceneListener listener, TaskEntity task) {
+    public TaskTile (SceneHolder listener, TaskEntity task) {
         this.interpreter = listener.getManager   ()
                          . getSharedContext      ()
                          . getMessageInterpreter ();

@@ -26,8 +26,8 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.shemplo.chat.neerc.enities.MessageEntity;
 import ru.shemplo.chat.neerc.enities.MessageEntity.MessageAccess;
-import ru.shemplo.chat.neerc.gfx.scenes.MainSceneListener;
-import ru.shemplo.chat.neerc.gfx.scenes.SceneListener;
+import ru.shemplo.chat.neerc.gfx.scenes.MainSceneHolder;
+import ru.shemplo.chat.neerc.gfx.scenes.SceneHolder;
 import ru.shemplo.chat.neerc.network.MessageService;
 import ru.shemplo.chat.neerc.network.listeners.MessageListener;
 
@@ -41,14 +41,14 @@ public class Conversation extends VBox implements MessageListener {
     protected final ListView <MessageEntity> messagesView;
     protected final ObservableList <MessageEntity> buffer;
     protected final MessageService messageService;
-    protected final MainSceneListener listener;
+    protected final MainSceneHolder listener;
     
     @Getter private MessageAccess access = PUBLIC;
     @Getter @Setter private String input = "";
     
-    public Conversation (SceneListener listener, String dialog) {
+    public Conversation (SceneHolder listener, String dialog) {
         this.buffer = FXCollections.observableArrayList ();
-        this.listener = (MainSceneListener) listener;
+        this.listener = (MainSceneHolder) listener;
         this.sendingMessageEnable = true;
         
         this.unread = new AtomicInteger (0);

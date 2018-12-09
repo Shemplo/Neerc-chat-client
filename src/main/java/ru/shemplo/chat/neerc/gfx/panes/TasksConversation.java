@@ -5,11 +5,11 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import ru.shemplo.chat.neerc.enities.MessageEntity;
 import ru.shemplo.chat.neerc.gfx.scenes.SceneComponent;
-import ru.shemplo.chat.neerc.gfx.scenes.SceneListener;
+import ru.shemplo.chat.neerc.gfx.scenes.SceneHolder;
 
 public class TasksConversation extends Conversation {
 
-    public TasksConversation (SceneListener listener, String dialog) {
+    public TasksConversation (SceneHolder listener, String dialog) {
         super (listener, dialog);
         
         this.sendingMessageEnable = false;

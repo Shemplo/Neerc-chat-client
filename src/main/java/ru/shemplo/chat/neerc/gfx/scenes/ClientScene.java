@@ -16,15 +16,15 @@ import ru.shemplo.chat.neerc.gfx.WindowManager;
 @RequiredArgsConstructor (access = AccessLevel.PRIVATE)
 public enum ClientScene {
  
-    MAIN ("main", false, MainSceneListener::new);
+    MAIN ("main", false, MainSceneHolder::new);
     
     private final String  filePrefix;
     private final boolean needReload;
     
-    private final BiFunction <WindowManager, Scene, SceneListener> 
+    private final BiFunction <WindowManager, Scene, SceneHolder> 
         producer; // Instance that will be responsible for events
     
-    @Getter private SceneListener listener;
+    @Getter private SceneHolder holder;
     @Getter private boolean inited;
     private Parent root;
     
@@ -49,9 +49,9 @@ public enum ClientScene {
         return root;
     }
     
-    public SceneListener reloadListener (WindowManager manager, Scene scene) {
-        inited = true; listener = getProducer ().apply (manager, scene);
-        return listener;
+    public SceneHolder reloadListener (WindowManager manager, Scene scene) {
+        inited = true; holder = getProducer ().apply (manager, scene);
+        return holder;
     }
     
 }

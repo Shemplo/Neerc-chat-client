@@ -84,7 +84,7 @@
                     </ScrollPane>
                     <Button minWidth="85"
                             styleClass="metal-button"
-                            disable="true"
+                            fx:id="join_room"
                             text="Join room">
                         <HBox.margin>
                             <Insets top="5" right="8" bottom="5" left="4"/>

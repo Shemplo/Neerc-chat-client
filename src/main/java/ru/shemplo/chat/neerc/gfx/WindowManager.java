@@ -21,8 +21,8 @@ import ru.shemplo.chat.neerc.config.ConfigStorage;
 import ru.shemplo.chat.neerc.config.SharedContext;
 import ru.shemplo.chat.neerc.enities.UserEntity.OnlineStatus;
 import ru.shemplo.chat.neerc.gfx.scenes.ClientScene;
-import ru.shemplo.chat.neerc.gfx.scenes.MainSceneListener;
-import ru.shemplo.chat.neerc.gfx.scenes.SceneListener;
+import ru.shemplo.chat.neerc.gfx.scenes.MainSceneHolder;
+import ru.shemplo.chat.neerc.gfx.scenes.SceneHolder;
 import ru.shemplo.chat.neerc.network.TasksService;
 import ru.shemplo.chat.neerc.network.UsersService;
 import ru.shemplo.chat.neerc.network.listeners.*;
@@ -46,8 +46,8 @@ public class WindowManager extends Application
         return instance;
     }
     
-    @Getter private volatile SceneListener sceneListener;
     @Getter private ConnectionListener connectionListener;
+    @Getter private volatile SceneHolder sceneHolder;
     @Getter private ConfigStorage configStorage;
     @Getter private SharedContext sharedContext; 
     @Getter private TasksService tasksService;
@@ -118,14 +118,14 @@ public class WindowManager extends Application
             if (scene.isNeedReload () || !scene.isInited ()) {
                 scene.reloadListener (this, stage.getScene ());
                 
-                boolean listenerWasNull = sceneListener == null;
-                this.sceneListener = scene.getListener ();
+                boolean listenerWasNull = sceneHolder == null;
+                this.sceneHolder = scene.getHolder ();
                 if (listenerWasNull) {
                     synchronized (this) { this.notify (); }
                 }
             }
             
-            scene.getListener ().onSceneShown ();
+            scene.getHolder ().onSceneShown ();
             stage.sizeToScene ();
             onSceneSwitched ();
         });
@@ -138,21 +138,20 @@ public class WindowManager extends Application
     }
     
     private void notifySceneListenerAboutConnectionState (ClientScene sceneHolder) {
-        if (sceneHolder.getListener () == null) { return; }
+        if (sceneHolder.getHolder () == null) { return; }
         
-        final SceneListener listener = sceneHolder.getListener ();
+        final SceneHolder holder = sceneHolder.getHolder ();
         if (connectionListener instanceof BaseConnectionListener
-                && listener instanceof ConnectionStatusListener) {
+                && holder instanceof ConnectionStatusListener) {
             BaseConnectionListener con = (BaseConnectionListener) connectionListener;
             final ConnectionStatus status = con.getCurrentState ();
             final String message = con.getCurrentMessage ();
             
-            ConnectionStatusListener sta = (ConnectionStatusListener) listener;
+            ConnectionStatusListener sta = (ConnectionStatusListener) holder;
             sta.onConnectionStatusChanged (status, message);
         }
     }
 
-    //@Override
     @Override
     public void onUserChangedPresence (String user, OnlineStatus status) {
         Arrays.asList (ClientScene.values ())
@@ -161,11 +160,11 @@ public class WindowManager extends Application
     
     private void notifySceneListenerAboutUserPresence (ClientScene sceneHolder,
             String user, OnlineStatus onlineStatus) {
-        if (sceneHolder.getListener () == null) { return; }
+        if (sceneHolder.getHolder () == null) { return; }
         
-        final SceneListener listener = sceneHolder.getListener ();
-        if (listener instanceof UserPresenceListener) {
-            UserPresenceListener pre = (UserPresenceListener) listener;
+        final SceneHolder holder = sceneHolder.getHolder ();
+        if (holder instanceof UserPresenceListener) {
+            UserPresenceListener pre = (UserPresenceListener) holder;
             pre.onUserChangedPresence (user, onlineStatus);
         }
     }
@@ -177,20 +176,21 @@ public class WindowManager extends Application
     }
     
     private void notifySceneListenerAboutUsersListUpdated (ClientScene sceneHolder) {
-        if (sceneHolder.getListener () == null) { return; }
+        if (sceneHolder.getHolder ()
+                == null) { return; }
         
-        final SceneListener listener = sceneHolder.getListener ();
-        if (listener instanceof UserPresenceListener) {
-            UserPresenceListener pre = (UserPresenceListener) listener;
+        final SceneHolder holder = sceneHolder.getHolder ();
+        if (holder instanceof UserPresenceListener) {
+            UserPresenceListener pre = (UserPresenceListener) holder;
             pre.onUsersUpdated ();
         }
     }
     
     public synchronized void createConversation (String title) {
-        SceneListener listener = ClientScene.MAIN.getListener ();
+        SceneHolder listener = ClientScene.MAIN.getHolder ();
         if (listener == null) { return; }
         
-        ((MainSceneListener) listener).createConversation (title);
+        ((MainSceneHolder) listener).createConversation (title);
     }
 
     @Override
@@ -200,11 +200,11 @@ public class WindowManager extends Application
     }
     
     private void notifySceneListenerAboutTasksListUpdated (ClientScene sceneHolder) {
-        if (sceneHolder.getListener () == null) { return; }
+        if (sceneHolder.getHolder () == null) { return; }
         
-        final SceneListener listener = sceneHolder.getListener ();
-        if (listener instanceof TasksStatusListener) {
-            TasksStatusListener tasksListener = (TasksStatusListener) listener;
+        final SceneHolder holder = sceneHolder.getHolder ();
+        if (holder instanceof TasksStatusListener) {
+            TasksStatusListener tasksListener = (TasksStatusListener) holder;
             tasksListener.onTasksUpdated ();
         }
     }
@@ -216,11 +216,11 @@ public class WindowManager extends Application
     }
     
     private void notifySceneListenerAboutTaskUpdated (ClientScene sceneHolder, String taskID) {
-        if (sceneHolder.getListener () == null) { return; }
+        if (sceneHolder.getHolder () == null) { return; }
         
-        final SceneListener listener = sceneHolder.getListener ();
-        if (listener instanceof TasksStatusListener) {
-            TasksStatusListener tasksListener = (TasksStatusListener) listener;
+        final SceneHolder holder = sceneHolder.getHolder ();
+        if (holder instanceof TasksStatusListener) {
+            TasksStatusListener tasksListener = (TasksStatusListener) holder;
             tasksListener.onTaskUpdated (taskID);
         }
     }
