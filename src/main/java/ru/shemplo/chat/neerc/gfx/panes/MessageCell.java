@@ -53,7 +53,7 @@ public class MessageCell extends ListCell <MessageEntity> {
             . getUsersService ();
         
         final HBox line = new HBox (8.0);
-        line.maxWidthProperty ().bind (getListView ().widthProperty ());
+        line.maxWidthProperty ().bind (getListView ().widthProperty ().subtract (16.0));
         line.getStyleClass ().add ("message-row");
         line.setPadding (new Insets (4));
         line.setMinHeight (30.0);

@@ -1,0 +1,27 @@
+import java.nio.file.attribute.FileAttribute;
+import java.util.jar.JarOutputStream;
+import java.nio.file.LinkOption;
+import java.util.jar.Manifest;
+import java.util.zip.ZipEntry;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.Path;
+
+String name = project.getName (), version = project.getVersion ();
+
+Path destination = Paths.get ("target", new String [] {"release"});
+if (!Files.exists (destination, new LinkOption [0])) {
+	Files.createDirectory (destination, new FileAttribute [0]);
+}
+
+String configFileName = "config.conf";
+Path config = Paths.get (configFileName, new String [0]);
+Files.copy (config, destination.resolve (configFileName), 
+			new LinkOption [0]);
+			
+String jarFileName = String.format ("%s-%s.jar", new Object [] {name, version});
+Path jar = Paths.get ("target", new String [] {jarFileName});
+Files.copy (jar, destination.resolve (
+					String.format ("%s.jar", new Object [] {name})
+				 ), 
+			new LinkOption [0]);

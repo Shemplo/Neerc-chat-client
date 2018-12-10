@@ -9,10 +9,10 @@ import ru.shemplo.chat.neerc.gfx.scenes.SceneHolder;
 
 public class TasksConversation extends Conversation {
 
+    protected final boolean sendingMessageEnable = false;
+    
     public TasksConversation (SceneHolder listener, String dialog) {
         super (listener, dialog);
-        
-        this.sendingMessageEnable = false;
     }
     
     @Override

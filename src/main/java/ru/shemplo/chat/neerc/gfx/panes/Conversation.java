@@ -22,8 +22,6 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import lombok.Getter;
-import lombok.Setter;
 import ru.shemplo.chat.neerc.enities.MessageEntity;
 import ru.shemplo.chat.neerc.enities.MessageEntity.MessageAccess;
 import ru.shemplo.chat.neerc.gfx.scenes.MainSceneHolder;
@@ -31,10 +29,8 @@ import ru.shemplo.chat.neerc.gfx.scenes.SceneHolder;
 import ru.shemplo.chat.neerc.network.MessageService;
 import ru.shemplo.chat.neerc.network.listeners.MessageListener;
 
-public class Conversation extends VBox implements MessageListener {
+public class Conversation extends AbsTabContent implements MessageListener {
     
-    @Getter protected boolean sendingMessageEnable;
-    @Getter protected final String dialog;
     protected final AtomicInteger unread;
     
     protected final Set <String> bufferIDs = new HashSet <> ();
@@ -43,16 +39,12 @@ public class Conversation extends VBox implements MessageListener {
     protected final MessageService messageService;
     protected final MainSceneHolder listener;
     
-    @Getter private MessageAccess access = PUBLIC;
-    @Getter @Setter private String input = "";
-    
     public Conversation (SceneHolder listener, String dialog) {
+        super (true, dialog);
+        
         this.buffer = FXCollections.observableArrayList ();
         this.listener = (MainSceneHolder) listener;
-        this.sendingMessageEnable = true;
-        
         this.unread = new AtomicInteger (0);
-        this.dialog = dialog;
         
         if (!dialog.equals ("public") && !dialog.equals ("tasks")) {
             HBox toolbar = new HBox ();
@@ -98,6 +90,7 @@ public class Conversation extends VBox implements MessageListener {
         messageService.subscribe (this);
     }
     
+    @Override
     public void onResponsibleTabOpened (Tab owner) {
         if (unread.get () > 0) {
             Platform.runLater (() -> owner.setText (dialog));

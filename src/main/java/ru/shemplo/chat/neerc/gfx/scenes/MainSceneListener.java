@@ -34,10 +34,6 @@ import ru.shemplo.snowball.stuctures.Pair;
 public class MainSceneListener implements UserPresenceListener, TasksStatusListener {
     
     private final MainSceneHolder holder;
-    
-    {
-        
-    }
 
     @Override
     public void onUserChangedPresence (String user, OnlineStatus status) {

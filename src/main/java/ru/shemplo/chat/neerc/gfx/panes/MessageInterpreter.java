@@ -132,6 +132,7 @@ public class MessageInterpreter {
         final Insets insets = new Insets (0, 8, 0, 0);
         
         int number = 0;
+        if (tmpBody.length () == 0) { return; } // message is empty
         while (tmpBody.charAt (number) == '!') { number++; }
         
         String tmpApplyingStyleClass = "";

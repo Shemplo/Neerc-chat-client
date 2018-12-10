@@ -33,9 +33,7 @@ import ru.shemplo.chat.neerc.enities.MessageEntity;
 import ru.shemplo.chat.neerc.enities.MessageEntity.MessageAccess;
 import ru.shemplo.chat.neerc.gfx.ClientAdapter;
 import ru.shemplo.chat.neerc.gfx.WindowManager;
-import ru.shemplo.chat.neerc.gfx.panes.Conversation;
-import ru.shemplo.chat.neerc.gfx.panes.MessageCell;
-import ru.shemplo.chat.neerc.gfx.panes.TasksConversation;
+import ru.shemplo.chat.neerc.gfx.panes.*;
 import ru.shemplo.chat.neerc.network.exten.ClockExtension.ClockStatus;
 import ru.shemplo.chat.neerc.network.exten.editor.EditMessageExtension;
 import ru.shemplo.chat.neerc.network.exten.editor.EditMessageExtension.EditActionType;
@@ -44,7 +42,7 @@ import ru.shemplo.snowball.stuctures.Trio;
 
 public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusListener {
     
-    @Getter private Conversation currentConversation;
+    @Getter private AbsTabContent currentConversation;
     
     private static final KeyCodeCombination 
         SEND_TRIGGER = new KeyCodeCombination (KeyCode.ENTER, KeyCombination.SHORTCUT_DOWN);
@@ -76,13 +74,13 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
         conversations.getSelectionModel ().selectedItemProperty ()
                      .addListener ((tabs, prev, next) -> {
              Node content = next.getContent ();
-             if (!(content instanceof Conversation)) { return; }
+             if (!(content instanceof AbsTabContent)) { return; }
              currentConversation.setInput (input.getText ());
-             this.currentConversation = (Conversation) content;
+             currentConversation = (AbsTabContent) content;
              
-             Conversation conversation = (Conversation) content;
-             conversation.onResponsibleTabOpened (next);
-             input.setText (conversation.getInput ());
+             AbsTabContent tabContent = (AbsTabContent) content;
+             tabContent.onResponsibleTabOpened (next);
+             input.setText (tabContent.getInput ());
         });
         
         /* init method */ makeDefaultButtons (input);
@@ -122,10 +120,17 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
         tasksChatTab.setContent (tasksConversation);
         tasksChatTab.setClosable (false);
         
+        final String ratingName = "rating";
+        Tab ratingMonitorTab = new Tab (ratingName);
+        ratingMonitorTab.setContent (new RatingMonitor (ratingName));
+        openedTabs.put (ratingName, ratingMonitorTab);
+        ratingMonitorTab.setClosable (false);
+        
         TabPane conversations = SceneComponent.CONVERSATIONS.get (scene);
         
         conversations.getTabs ().add (publicChatTab);
         conversations.getTabs ().add (tasksChatTab);
+        conversations.getTabs ().add (ratingMonitorTab);
         conversations.getSelectionModel ().clearAndSelect (0);
     }
     
