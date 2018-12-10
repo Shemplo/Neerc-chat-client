@@ -16,6 +16,6 @@ properties*
 *.db
 *.iml
 *.jks
-*.conf
+*.prod.conf
 
 .cache*
