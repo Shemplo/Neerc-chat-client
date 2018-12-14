@@ -1,6 +1,6 @@
 ## Desctop chat client for NEERC / ICPC volunteers
 
-### :hammer_and_wrench: Building and runnging
+### :hammer_and_wrench: Building and running
 
 1. Clone project with `git clone https://github.com/Shemplo/Neerc-chat-client.git`
 2. Edit config `config.conf` in root of project
