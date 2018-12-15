@@ -1,0 +1,13 @@
+language: java
+sudo: false
+
+script: 
+  - cd "Neerc chat client"
+  - mvn clean package cobertura:cobertura
+  
+after_success:
+  - echo "Build was successful. $TRAVIS_TEST_RESULT"
+  - bash <(curl -s https://codecov.io/bash)
+  
+after_failure:
+  - echo "Build was failed"
