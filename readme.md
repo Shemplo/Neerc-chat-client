@@ -3,6 +3,7 @@
 [![Language](https://img.shields.io/badge/language-java-red.svg)](https://github.com/Shemplo/Neerc-chat-client/blob/master/)
 [![Build Status](https://travis-ci.com/Shemplo/Neerc-chat-client.svg?branch=master)](https://travis-ci.com/Shemplo/Neerc-chat-client)
 [![codecov](https://codecov.io/gh/Shemplo/Neerc-chat-client/branch/master/graph/badge.svg)](https://codecov.io/gh/Shemplo/Neerc-chat-client)
+[![Maintainability](https://api.codeclimate.com/v1/badges/62281b7ca24a0daa1720/maintainability)](https://codeclimate.com/github/Shemplo/Neerc-chat-client/maintainability)
 [![GitHub license](https://img.shields.io/github/license/Shemplo/Neerc-chat-client.svg)](https://github.com/Shemplo/Neerc-chat-client/blob/master/LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/Shemplo/Neerc-chat-client.svg)](https://github.com/Shemplo/Neerc-chat-client/stargazers)
 
