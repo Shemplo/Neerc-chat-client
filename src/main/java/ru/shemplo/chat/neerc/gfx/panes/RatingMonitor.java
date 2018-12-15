@@ -1,28 +1,21 @@
 package ru.shemplo.chat.neerc.gfx.panes;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
+import ru.shemplo.chat.neerc.gfx.scenes.MainSceneHolder;
+import ru.shemplo.chat.neerc.gfx.scenes.SceneHolder;
 
 public class RatingMonitor extends AbsTabContent {
     
-    public RatingMonitor (String tabName) {
-        super (false, tabName);
-        
-        
-        HBox settingsBar = new HBox (8.0);
-        settingsBar.setAlignment (Pos.CENTER_LEFT);
-        settingsBar.setPadding (new Insets (8.0));
-        getChildren ().add (settingsBar);
+    public RatingMonitor (SceneHolder holder, String tabName) {
+        super (false, (MainSceneHolder) holder, tabName);
         
         Label sourceLabel = new Label ("Source:");
-        settingsBar.getChildren ().add (sourceLabel);
+        toolbar.getChildren ().add (sourceLabel);
         
         TextField source = new TextField ();
-        settingsBar.getChildren ().add (source);
+        toolbar.getChildren ().add (source);
     }
 
     @Override

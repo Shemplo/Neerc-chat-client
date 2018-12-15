@@ -16,14 +16,9 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.HBox;
@@ -44,8 +39,6 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
     
     @Getter private AbsTabContent currentConversation;
     
-    private static final KeyCodeCombination 
-        SEND_TRIGGER = new KeyCodeCombination (KeyCode.ENTER, KeyCombination.SHORTCUT_DOWN);
     private final Map <String, Conversation> knownConversations = new ConcurrentHashMap <> ();
     private final MainSceneListener sceneListener = new MainSceneListener (this);
     private final Map <String, Tab> openedTabs = new ConcurrentHashMap <> ();
@@ -64,26 +57,28 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
         
         /* init method */ makeDefaultTabs ();
         
+        /*
         TextArea input = SceneComponent.INPUT.get (scene);
         input.addEventHandler (KeyEvent.KEY_PRESSED, ke -> {
             if (!SEND_TRIGGER.match (ke)) { return; }
             readAndendIfPossible (input);
         });
+        */
         
         TabPane conversations = SceneComponent.CONVERSATIONS.get (scene);        
         conversations.getSelectionModel ().selectedItemProperty ()
                      .addListener ((tabs, prev, next) -> {
              Node content = next.getContent ();
              if (!(content instanceof AbsTabContent)) { return; }
-             currentConversation.setInput (input.getText ());
+             //currentConversation.setInput (input.getText ());
              currentConversation = (AbsTabContent) content;
              
              AbsTabContent tabContent = (AbsTabContent) content;
              tabContent.onResponsibleTabOpened (next);
-             input.setText (tabContent.getInput ());
+             //input.setText (tabContent.getInput ());
         });
         
-        /* init method */ makeDefaultButtons (input);
+        /* init method */ makeDefaultButtons (null);
         
         Timeline clockLineUpdator = new Timeline (
             new KeyFrame (Duration.ZERO, this::updateClockLine),
@@ -122,7 +117,7 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
         
         final String ratingName = "rating";
         Tab ratingMonitorTab = new Tab (ratingName);
-        ratingMonitorTab.setContent (new RatingMonitor (ratingName));
+        ratingMonitorTab.setContent (new RatingMonitor (this, ratingName));
         openedTabs.put (ratingName, ratingMonitorTab);
         ratingMonitorTab.setClosable (false);
         
@@ -141,6 +136,7 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
               . start (); // Not to block GUI thread
         });
         
+        /*
         Button clearBuffer = SceneComponent.CLEAR_BUFFER.get (scene);
         clearBuffer.setOnMouseClicked (__ -> clearBuffer ());
         
@@ -160,6 +156,7 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
         Button attach = SceneComponent.ATTACH.get (scene);
         attach.setBackground (Background.EMPTY);
         attach.setCursor (Cursor.HAND);
+        */
     }
     
     private void updateClockLine (ActionEvent actionEvent) {
@@ -182,7 +179,8 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
         });
     }
     
-    private void readAndendIfPossible (TextArea input) {
+    @SuppressWarnings ("unused")
+    private void readAndSendIfPossible (TextArea input) {
         if (!currentConversation.isSendingMessageEnable ()) { return; }
         if (input.getText ().trim ().length () == 0) { return; }
         sendMessage (input.getText ());

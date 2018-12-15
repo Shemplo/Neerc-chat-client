@@ -8,20 +8,18 @@ import ru.shemplo.chat.neerc.gfx.scenes.SceneComponent;
 import ru.shemplo.chat.neerc.gfx.scenes.SceneHolder;
 
 public class TasksConversation extends Conversation {
-
-    protected final boolean sendingMessageEnable = false;
     
     public TasksConversation (SceneHolder listener, String dialog) {
-        super (listener, dialog);
+        super (listener, dialog, false);
     }
     
     @Override
     public boolean onAdded (MessageEntity message) {
         if (!super.onAdded (message)) { return false; }
-        final Scene scene = listener.getScene ();
+        final Scene scene = holder.getScene ();
         
         TabPane conversations = SceneComponent.CONVERSATIONS.get (scene);
-        Tab owner = listener.getOrCreateAndGetTabFor (dialog, this);
+        Tab owner = holder.getOrCreateAndGetTabFor (dialog, this);
         int index = conversations.getTabs ().indexOf (owner);
         if (index != -1) {
             conversations.getSelectionModel ().select (index);

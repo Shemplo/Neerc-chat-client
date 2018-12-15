@@ -97,44 +97,6 @@
                              VBox.vgrow="ALWAYS"
                              minHeight="200">
                     </TabPane>
-                    <HBox spacing="8.0"
-                          alignment="CENTER_LEFT"
-                          VBox.vgrow="NEVER">
-                        <VBox.margin>
-                            <Insets top="4" right="8" left="8"/>
-                        </VBox.margin>
-                        <Label text="Selected message:"
-                               minWidth="125"/>
-                        <HBox HBox.hgrow="ALWAYS"
-                              alignment="CENTER_LEFT">
-                            <Label fx:id="buffer_content"/>
-                        </HBox>
-                        <Button fx:id="clear_buffer"
-                                text="x"/>
-                    </HBox>
-                    <HBox spacing="8"
-                          VBox.vgrow="NEVER">
-                        <VBox.margin>
-                            <Insets top="8" right="8" bottom="8" left="8"/>
-                        </VBox.margin>
-                        <VBox spacing="8"
-                              alignment="TOP_RIGHT">
-                            <Button fx:id="send"/>
-                            <Button fx:id="smile" disable="true"/>
-                            <Button fx:id="attach" disable="true">
-                                <graphic>
-                                    <ImageView>
-                                        <Image url="/gfx/attach.png"/>
-                                    </ImageView>
-                                </graphic>
-                            </Button>
-                        </VBox>
-                        <TextArea HBox.hgrow="ALWAYS"
-                                  maxHeight="120"
-                                  minHeight="120"
-                                  wrapText="true"
-                                  fx:id="input"/>
-                    </HBox>
                 </VBox>
             </VBox>
             <VBox minWidth="350">

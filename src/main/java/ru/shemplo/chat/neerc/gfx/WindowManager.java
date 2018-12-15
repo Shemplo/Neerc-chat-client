@@ -2,19 +2,24 @@ package ru.shemplo.chat.neerc.gfx;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.jivesoftware.smack.ConnectionListener;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import ru.shemplo.chat.neerc.config.ConfigStorage;
 import ru.shemplo.chat.neerc.config.SharedContext;
 import ru.shemplo.chat.neerc.enities.UserEntity.OnlineStatus;
@@ -25,6 +30,7 @@ import ru.shemplo.chat.neerc.network.TasksService;
 import ru.shemplo.chat.neerc.network.UsersService;
 import ru.shemplo.chat.neerc.network.listeners.*;
 
+@Slf4j
 public class WindowManager extends Application 
     implements ConnectionStatusListener, UserPresenceListener, 
         TasksStatusListener {
@@ -41,6 +47,18 @@ public class WindowManager extends Application
         }
         
         return instance;
+    }
+    
+    public static Optional <Parent> loadComponent (String name) {
+        final String path = String.format ("/fxml/comps/%s.fxml", name);
+        URL url = WindowManager.class.getResource (path);
+        try {
+            return Optional.ofNullable (FXMLLoader.load (url));
+        } catch (IOException | NullPointerException se) {
+            log.error ("Excpeption: {}", se.getMessage ());
+        }
+        
+        return Optional.empty ();
     }
     
     @Getter private ConnectionListener connectionListener;

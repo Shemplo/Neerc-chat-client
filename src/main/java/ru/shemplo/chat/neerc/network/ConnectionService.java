@@ -14,6 +14,7 @@ import javax.net.ssl.SSLContext;
 import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.ConnectionConfiguration.SecurityMode;
 import org.jivesoftware.smack.SmackException.ConnectionException;
+import org.jivesoftware.smack.SmackException.NoResponseException;
 import org.jivesoftware.smack.SmackException.NotConnectedException;
 import org.jivesoftware.smack.filter.StanzaFilter;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
@@ -125,9 +126,8 @@ public class ConnectionService {
         try {            
             this.connection = prepareConnection ();
             getConnection ().connect ();
-        } catch (ConnectionException ce) {
-            connectionListener
-            . connectionClosedOnError (ce);
+        } catch (ConnectionException | NoResponseException es) {
+            connectionListener.connectionClosedOnError (es);
         }
     }
     

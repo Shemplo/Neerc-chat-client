@@ -133,7 +133,9 @@ public class MessageInterpreter {
         
         int number = 0;
         if (tmpBody.length () == 0) { return; } // message is empty
-        while (tmpBody.charAt (number) == '!') { number++; }
+        while (number < tmpBody.length () && tmpBody.charAt (number) == '!') { 
+            number += 1; 
+        }
         
         String tmpApplyingStyleClass = "";
         if (number > 0) {
