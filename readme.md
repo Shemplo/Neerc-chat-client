@@ -1,7 +1,10 @@
 ## Desctop chat client for NEERC / ICPC volunteers
 
+[![Language](https://img.shields.io/badge/language-java-red.svg)](https://github.com/Shemplo/Neerc-chat-client/blob/master/)
 [![Build Status](https://travis-ci.com/Shemplo/Neerc-chat-client.svg?branch=master)](https://travis-ci.com/Shemplo/Neerc-chat-client)
 [![codecov](https://codecov.io/gh/Shemplo/Neerc-chat-client/branch/master/graph/badge.svg)](https://codecov.io/gh/Shemplo/Neerc-chat-client)
+[![GitHub license](https://img.shields.io/github/license/Shemplo/Neerc-chat-client.svg)](https://github.com/Shemplo/Neerc-chat-client/blob/master/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/Shemplo/Neerc-chat-client.svg)](https://github.com/Shemplo/Neerc-chat-client/stargazers)
 
 ### :hammer_and_wrench: Building and running
 
