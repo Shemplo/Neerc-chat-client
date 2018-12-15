@@ -1,6 +1,7 @@
 ## Desctop chat client for NEERC / ICPC volunteers
 
 [![Build Status](https://travis-ci.com/Shemplo/Neerc-chat-client.svg?branch=master)](https://travis-ci.com/Shemplo/Neerc-chat-client)
+[![codecov](https://codecov.io/gh/Shemplo/Neerc-chat-client/branch/master/graph/badge.svg)](https://codecov.io/gh/Shemplo/Neerc-chat-client)
 
 ### :hammer_and_wrench: Building and running
 

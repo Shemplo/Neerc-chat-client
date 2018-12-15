@@ -2,7 +2,6 @@ language: java
 sudo: false
 
 script: 
-  - cd "Neerc chat client"
   - mvn clean package cobertura:cobertura
   
 after_success:
