@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.panemu.tiwulfx.control.DetachableTab;
+import com.panemu.tiwulfx.control.DetachableTabPane;
 import org.jivesoftware.smack.util.StringUtils;
 
 import javafx.animation.KeyFrame;
@@ -64,8 +66,8 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
             readAndendIfPossible (input);
         });
         */
-        
-        TabPane conversations = SceneComponent.CONVERSATIONS.get (scene);        
+
+        DetachableTabPane conversations = SceneComponent.CONVERSATIONS.get (scene);
         conversations.getSelectionModel ().selectedItemProperty ()
                      .addListener ((tabs, prev, next) -> {
              Node content = next.getContent ();
@@ -105,7 +107,7 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
         this.currentConversation = publicConversation;
         publicChatTab.setContent (publicConversation);
         publicChatTab.setClosable (false);
-        
+
         Tab tasksChatTab = new Tab ("tasks");
         openedTabs.put (tasksChatTab.getText (), tasksChatTab);
         final Conversation tasksConversation
@@ -120,8 +122,8 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
         ratingMonitorTab.setContent (new RatingMonitor (this, ratingName));
         openedTabs.put (ratingName, ratingMonitorTab);
         ratingMonitorTab.setClosable (false);
-        
-        TabPane conversations = SceneComponent.CONVERSATIONS.get (scene);
+
+        DetachableTabPane conversations = SceneComponent.CONVERSATIONS.get (scene);
         
         conversations.getTabs ().add (publicChatTab);
         conversations.getTabs ().add (tasksChatTab);
@@ -285,7 +287,7 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
             openedTabs.putIfAbsent (title, created);
             
             Platform.runLater (() -> {
-                TabPane conversations = SceneComponent.CONVERSATIONS.get (scene);
+                DetachableTabPane conversations = SceneComponent.CONVERSATIONS.get (scene);
                 conversations.getTabs ().add (created);
             });
             

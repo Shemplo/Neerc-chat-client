@@ -8,10 +8,10 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.panemu.tiwulfx.control.DetachableTabPane;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -105,8 +105,8 @@ public class MainSceneListener implements UserPresenceListener, TasksStatusListe
         final String title = source.getText ();
         Conversation conversation = holder.getOrCreateAndGetConversation (title);
         Tab tab = holder.getOrCreateAndGetTabFor (title, conversation);
-        
-        TabPane conversations = SceneComponent.CONVERSATIONS
+
+        DetachableTabPane conversations = SceneComponent.CONVERSATIONS
                               . get (holder.getScene ());
         int index = conversations.getTabs ().indexOf (tab);
         if (index != -1) {
