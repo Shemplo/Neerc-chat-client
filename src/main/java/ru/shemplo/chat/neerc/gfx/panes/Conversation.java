@@ -86,6 +86,8 @@ public class Conversation extends AbsTabContent implements MessageListener {
     
     @Override
     public void onResponsibleTabOpened (Tab owner) {
+        setTabOpened (true);
+        
         if (unread.get () > 0) {
             Platform.runLater (() -> owner.setText (dialog));
             final LocalDateTime now = LocalDateTime.now ();
@@ -95,18 +97,20 @@ public class Conversation extends AbsTabContent implements MessageListener {
     }
     
     @Override
+    public void onResponsibleTabClosed (Tab owner) {
+        setTabOpened (false);
+    }
+    
+    @Override
     public boolean onAdded (MessageEntity message) {
         if (!message.getDialog ().equals (dialog)) { return false; }
         
         Platform.runLater (() -> {
             if (!bufferIDs.contains (message.getID ())) {
+                unread.addAndGet (isTabOpened () ? 0 : 1);
                 bufferIDs.add (message.getID ());
                 buffer.add (message);
                 
-                if (!holder.getCurrentConversation ()
-                             .equals (this)) {
-                    unread.incrementAndGet ();
-                }
             }
             
             if (unread.get () > 0) {
