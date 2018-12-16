@@ -90,11 +90,11 @@
                         </HBox.margin>
                     </Button>
                 </HBox>
-                <VBox HBox.hgrow="ALWAYS"
-                      VBox.vgrow="ALWAYS">
+                <VBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                     <DetachableTabPane fx:id="conversations"
                                        VBox.vgrow="ALWAYS"
-                                       minHeight="200">
+                                       minHeight="200"
+                                       minWidth="250">
                     </DetachableTabPane>
                 </VBox>
             </VBox>

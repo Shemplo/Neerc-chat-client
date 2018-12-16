@@ -24,9 +24,7 @@ import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 import javafx.util.Duration;
 import lombok.Getter;
 import ru.shemplo.chat.neerc.enities.MessageEntity;
@@ -87,6 +85,8 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
             @Override protected void init (DetachableTabPane tabPane) {
                 tabPane.getSelectionModel ().selectedItemProperty ()
                        .addListener (TAB_LISTENER);
+                VBox.setVgrow (tabPane, Priority.ALWAYS);
+                tabPane.setMinWidth (250.0);
             }
         };
         conversations.setDetachableTabPaneFactory (tabPaneFactory);
