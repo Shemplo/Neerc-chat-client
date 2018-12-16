@@ -86,7 +86,7 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
                 tabPane.getSelectionModel ().selectedItemProperty ()
                        .addListener (TAB_LISTENER);
                 VBox.setVgrow (tabPane, Priority.ALWAYS);
-                tabPane.setMinWidth (250.0);
+                tabPane.setMinWidth (350.0);
             }
         };
         conversations.setDetachableTabPaneFactory (tabPaneFactory);

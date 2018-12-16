@@ -94,7 +94,7 @@
                     <DetachableTabPane fx:id="conversations"
                                        VBox.vgrow="ALWAYS"
                                        minHeight="200"
-                                       minWidth="250">
+                                       minWidth="350">
                     </DetachableTabPane>
                 </VBox>
             </VBox>
