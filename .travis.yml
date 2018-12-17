@@ -9,6 +9,7 @@ deploy:
   skip_cleanup: true
   on:
     repo: Shemplo/Neerc-chat-client
+    tags: true
 
 script:
   - mvn clean package cobertura:cobertura
