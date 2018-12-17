@@ -91,8 +91,10 @@
                     </Button>
                 </HBox>
                 <VBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                    <!-- this is KOSTYL for HiDPI screens -->
                     <DetachableTabPane fx:id="conversations"
                                        VBox.vgrow="ALWAYS"
+                                       prefHeight="9999"
                                        minHeight="200"
                                        minWidth="350">
                     </DetachableTabPane>
