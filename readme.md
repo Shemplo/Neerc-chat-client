@@ -14,3 +14,13 @@
 3. Run packaging `mvn package`
 4. Go to `release` directory in  `target`
 5. Run `jar` file with `java -jar chat.neerc.jar`
+
+### :man_technologist: Contributors
+[![](https://sourcerer.io/fame/Shemplo/Shemplo/Neerc-chat-client/images/0)](https://sourcerer.io/fame/Shemplo/Shemplo/Neerc-chat-client/links/0)
+[![](https://sourcerer.io/fame/Shemplo/Shemplo/Neerc-chat-client/images/1)](https://sourcerer.io/fame/Shemplo/Shemplo/Neerc-chat-client/links/1)
+[![](https://sourcerer.io/fame/Shemplo/Shemplo/Neerc-chat-client/images/2)](https://sourcerer.io/fame/Shemplo/Shemplo/Neerc-chat-client/links/2)
+[![](https://sourcerer.io/fame/Shemplo/Shemplo/Neerc-chat-client/images/3)](https://sourcerer.io/fame/Shemplo/Shemplo/Neerc-chat-client/links/3)
+[![](https://sourcerer.io/fame/Shemplo/Shemplo/Neerc-chat-client/images/4)](https://sourcerer.io/fame/Shemplo/Shemplo/Neerc-chat-client/links/4)
+[![](https://sourcerer.io/fame/Shemplo/Shemplo/Neerc-chat-client/images/5)](https://sourcerer.io/fame/Shemplo/Shemplo/Neerc-chat-client/links/5)
+[![](https://sourcerer.io/fame/Shemplo/Shemplo/Neerc-chat-client/images/6)](https://sourcerer.io/fame/Shemplo/Shemplo/Neerc-chat-client/links/6)
+[![](https://sourcerer.io/fame/Shemplo/Shemplo/Neerc-chat-client/images/7)](https://sourcerer.io/fame/Shemplo/Shemplo/Neerc-chat-client/links/7)
