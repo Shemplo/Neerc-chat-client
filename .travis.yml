@@ -1,6 +1,11 @@
 language: java
 sudo: false
 
+before_deploy:
+  - TRAVIS_TAG='v'`mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | sed -n -e '/^\[.*\]/ !{ /^[0-9]/ { p; q } }'`
+  - echo "Tag value: $TRAVIS_TAG"
+  - git tag $TRAVIS_TAG
+
 deploy:
   provider: releases
   api_key:
@@ -9,7 +14,7 @@ deploy:
   skip_cleanup: true
   on:
     repo: Shemplo/Neerc-chat-client
-    tags: true
+    branch: master
 
 script:
   - mvn clean package cobertura:cobertura
