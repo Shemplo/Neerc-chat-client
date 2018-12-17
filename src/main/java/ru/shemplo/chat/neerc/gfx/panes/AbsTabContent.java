@@ -55,12 +55,6 @@ public abstract class AbsTabContent extends VBox {
         toolbar.setPadding (new Insets (8.0));
         getChildren ().add (toolbar);
         
-        Button toWindow = new Button ();
-        toWindow.setGraphic (holder.getManager ().getSharedContext ()
-                                   . getMessageInterpreter ()
-                                   . getIcon ("windows", 16, 16));
-        toolbar.getChildren ().add (toWindow);
-        
         VBox stub = new VBox ();
         VBox.setVgrow (stub, Priority.ALWAYS);
         getChildren ().add (stub);

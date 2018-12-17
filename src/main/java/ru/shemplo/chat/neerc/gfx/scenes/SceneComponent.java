@@ -16,6 +16,8 @@ public enum SceneComponent implements SceneContainer {
     
     USERS_SCROLL ("users_horizon"),
     USERS        ("users"),
+    JOIN_ROOM    ("join_room"),
+    ROOM_NAME    ("room_name"),
     
     CONVERSATIONS ("conversations"),
     

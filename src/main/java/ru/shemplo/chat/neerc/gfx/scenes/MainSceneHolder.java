@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 import org.jivesoftware.smack.util.StringUtils;
 
@@ -22,9 +23,16 @@ import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import lombok.Getter;
 import ru.shemplo.chat.neerc.enities.MessageEntity;
@@ -91,13 +99,13 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
         };
         conversations.setDetachableTabPaneFactory (tabPaneFactory);
         conversations.setStageOwnerFactory (stage -> {
-            stage.setOnCloseRequest (we -> we.consume ());
+            stage.setOnCloseRequest (WindowEvent::consume);
             stage.setTitle ("Conversations");
             return getScene ().getWindow ();
         });
         conversations.setSceneFactory (pane -> {
             pane.getStylesheets ().add ("/css/main.css"); // XXX: must be property value
-            pane.setMinSize (500, 625);
+            pane.setMinSize (600, 625);
             return new Scene (pane);
         });
         
@@ -159,6 +167,50 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
         reconnect.setOnAction (__ -> {
             new Thread (manager.getSharedContext ().getClientAdapter ()::performReconnection)
               . start (); // Not to block GUI thread
+        });
+        
+        Optional.ofNullable (SceneComponent.JOIN_ROOM.<Button> get (scene))
+                .ifPresent (button -> {
+            button.setOnMouseClicked (__ -> {
+                Stage stage = new Stage (StageStyle.DECORATED);
+                stage.initModality (Modality.WINDOW_MODAL);
+                stage.initOwner (manager.getStage ());
+                
+                Parent root = WindowManager.loadComponent ("join_room_window")
+                            . get ();
+                final Scene scene = new Scene (root);
+                stage.setTitle ("Room name");
+                stage.setResizable (false);
+                stage.setScene (scene);
+                stage.sizeToScene ();
+                stage.show ();
+                
+                final Consumer <Event> joinRoomTask = ___ -> {
+                    if (___ instanceof KeyEvent) {
+                        KeyEvent event = (KeyEvent) ___;
+                        if (event.getCode () != KeyCode.ENTER) {
+                            return; // only `enter` is accepted
+                        }
+                    }
+                    
+                    TextField text = SceneComponent.ROOM_NAME.get (root);
+                    final String room = text.getText ().trim ();
+                    if (room.length () == 0) { return; }
+                    getOrCreateAndGetTabFor (room, 
+                        createConversation (room));
+                    stage.close ();
+                };
+                
+                Optional.ofNullable (SceneComponent.ROOM_NAME.<TextField> get (root))
+                        .ifPresent (text -> {
+                    text.setOnKeyPressed (joinRoomTask::accept);
+                });
+                
+                Optional.ofNullable (SceneComponent.JOIN_ROOM.<Button> get (root))
+                        .ifPresent (joinButton -> {
+                    joinButton.setOnMouseClicked (joinRoomTask::accept);
+                });
+            });
         });
     }
     
