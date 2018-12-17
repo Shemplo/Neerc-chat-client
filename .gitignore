@@ -10,8 +10,8 @@
 .classpath
 .project
 
-dependency*
-properties*
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
 
 *.db
 *.iml
@@ -19,3 +19,5 @@ properties*
 *.prod.conf
 
 .cache*
+
+/dependency-reduced-pom.xml

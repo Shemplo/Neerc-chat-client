@@ -4,7 +4,7 @@
 
   <groupId>ru.shemplo</groupId>
   <artifactId>chat.neerc</artifactId>
-  <version>0.1.9.1</version>
+  <version>0.1.9.2</version>
   <packaging>jar</packaging>
 
   <properties>
@@ -164,6 +164,12 @@
       <artifactId>FranzXaver</artifactId>
       <version>0.1</version>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.panemu</groupId>
+      <artifactId>tiwulfx</artifactId>
+      <!-- Version 3.0 might be incompatible with Java 8 -->
+      <version>2.0</version>
     </dependency>
     <dependency>
       <groupId>ru.shemplo</groupId>

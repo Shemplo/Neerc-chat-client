@@ -23,4 +23,9 @@ public class RatingMonitor extends AbsTabContent {
         
     }
     
+    @Override
+    public void onResponsibleTabClosed (Tab owner) {
+        
+    }
+    
 }

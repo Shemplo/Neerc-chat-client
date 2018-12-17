@@ -98,7 +98,7 @@ public class WindowManager extends Application
         @SuppressWarnings ("unused")
         Dimension screen = Toolkit.getDefaultToolkit ().getScreenSize ();
         stage.getIcons ().add (new Image ("/gfx/chat.png"));
-        stage.setMinWidth (725); stage.setMinHeight (675 - 200);
+        stage.setMinWidth (725); stage.setMinHeight (675);
         
         stage.setScene (new Scene (new Pane ()));
         stage.setTitle ("Neerc chat");

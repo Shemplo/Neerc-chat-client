@@ -11,17 +11,20 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.jivesoftware.smack.util.StringUtils;
 
+import com.panemu.tiwulfx.control.DetachableTab;
+import com.panemu.tiwulfx.control.DetachableTabPane;
+import com.panemu.tiwulfx.control.DetachableTabPaneFactory;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 import javafx.util.Duration;
 import lombok.Getter;
 import ru.shemplo.chat.neerc.enities.MessageEntity;
@@ -43,6 +46,24 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
     private final MainSceneListener sceneListener = new MainSceneListener (this);
     private final Map <String, Tab> openedTabs = new ConcurrentHashMap <> ();
     
+    private final ChangeListener <Tab> TAB_LISTENER = (pane, prev, next) -> {
+        Optional.ofNullable (prev).ifPresent (tab -> {
+            Node content = tab.getContent ();
+            
+            if (!(content instanceof AbsTabContent)) { return; }
+            AbsTabContent tabContent = (AbsTabContent) content;
+            tabContent.onResponsibleTabClosed (tab);
+        });
+        
+        Optional.ofNullable (next).ifPresent (tab -> {
+            Node content = tab.getContent ();
+            
+            if (!(content instanceof AbsTabContent)) { return; }
+            AbsTabContent tabContent = (AbsTabContent) content;
+            tabContent.onResponsibleTabOpened (tab);            
+        });
+    };
+    
     protected MainSceneHolder (WindowManager manager, Scene scene) {
         super (manager, scene);
         
@@ -56,29 +77,31 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
         });
         
         /* init method */ makeDefaultTabs ();
-        
-        /*
-        TextArea input = SceneComponent.INPUT.get (scene);
-        input.addEventHandler (KeyEvent.KEY_PRESSED, ke -> {
-            if (!SEND_TRIGGER.match (ke)) { return; }
-            readAndendIfPossible (input);
-        });
-        */
-        
-        TabPane conversations = SceneComponent.CONVERSATIONS.get (scene);        
+
+        DetachableTabPane conversations = SceneComponent.CONVERSATIONS.get (scene);
         conversations.getSelectionModel ().selectedItemProperty ()
-                     .addListener ((tabs, prev, next) -> {
-             Node content = next.getContent ();
-             if (!(content instanceof AbsTabContent)) { return; }
-             //currentConversation.setInput (input.getText ());
-             currentConversation = (AbsTabContent) content;
-             
-             AbsTabContent tabContent = (AbsTabContent) content;
-             tabContent.onResponsibleTabOpened (next);
-             //input.setText (tabContent.getInput ());
+                     .addListener (TAB_LISTENER);
+        DetachableTabPaneFactory tabPaneFactory = new DetachableTabPaneFactory () {
+            @Override protected void init (DetachableTabPane tabPane) {
+                tabPane.getSelectionModel ().selectedItemProperty ()
+                       .addListener (TAB_LISTENER);
+                VBox.setVgrow (tabPane, Priority.ALWAYS);
+                tabPane.setMinWidth (350.0);
+            }
+        };
+        conversations.setDetachableTabPaneFactory (tabPaneFactory);
+        conversations.setStageOwnerFactory (stage -> {
+            stage.setOnCloseRequest (we -> we.consume ());
+            stage.setTitle ("Conversations");
+            return getScene ().getWindow ();
+        });
+        conversations.setSceneFactory (pane -> {
+            pane.getStylesheets ().add ("/css/main.css"); // XXX: must be property value
+            pane.setMinSize (500, 625);
+            return new Scene (pane);
         });
         
-        /* init method */ makeDefaultButtons (null);
+        /* init method */ makeDefaultButtons ();
         
         Timeline clockLineUpdator = new Timeline (
             new KeyFrame (Duration.ZERO, this::updateClockLine),
@@ -96,67 +119,47 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
     }
     
     private final void makeDefaultTabs () {
-        Tab publicChatTab = new Tab ("public");
+        DetachableTab publicChatTab = new DetachableTab ("public");
         openedTabs.put (publicChatTab.getText (), publicChatTab);
         final Conversation publicConversation 
             = new Conversation (this, publicChatTab.getText ());
+        publicConversation.onResponsibleTabOpened (publicChatTab);
         knownConversations.put (publicChatTab.getText (), 
                                      publicConversation);
         this.currentConversation = publicConversation;
         publicChatTab.setContent (publicConversation);
         publicChatTab.setClosable (false);
-        
-        Tab tasksChatTab = new Tab ("tasks");
+
+        DetachableTab tasksChatTab = new DetachableTab ("tasks");
         openedTabs.put (tasksChatTab.getText (), tasksChatTab);
         final Conversation tasksConversation
             = new TasksConversation (this, tasksChatTab.getText ());
         knownConversations.put (tasksChatTab.getText (), 
                                      tasksConversation);
         tasksChatTab.setContent (tasksConversation);
+        tasksChatTab.setDetachable (false);
         tasksChatTab.setClosable (false);
         
         final String ratingName = "rating";
-        Tab ratingMonitorTab = new Tab (ratingName);
+        DetachableTab ratingMonitorTab = new DetachableTab (ratingName);
         ratingMonitorTab.setContent (new RatingMonitor (this, ratingName));
         openedTabs.put (ratingName, ratingMonitorTab);
         ratingMonitorTab.setClosable (false);
-        
-        TabPane conversations = SceneComponent.CONVERSATIONS.get (scene);
-        
+
+        DetachableTabPane conversations = SceneComponent.CONVERSATIONS
+                                        . get (scene);
         conversations.getTabs ().add (publicChatTab);
         conversations.getTabs ().add (tasksChatTab);
         conversations.getTabs ().add (ratingMonitorTab);
         conversations.getSelectionModel ().clearAndSelect (0);
     }
     
-    private final void makeDefaultButtons (TextArea input) {
+    private final void makeDefaultButtons () {
         Button reconnect = SceneComponent.RECONNECT_BUTTON.get (scene);
         reconnect.setOnAction (__ -> {
             new Thread (manager.getSharedContext ().getClientAdapter ()::performReconnection)
               . start (); // Not to block GUI thread
         });
-        
-        /*
-        Button clearBuffer = SceneComponent.CLEAR_BUFFER.get (scene);
-        clearBuffer.setOnMouseClicked (__ -> clearBuffer ());
-        
-        Button send = SceneComponent.SEND.get (scene);
-        send.setGraphic (manager.getSharedContext ().getMessageInterpreter ()
-                                .getIcon ("send", 36, 20));
-        send.setOnAction (__ -> readAndendIfPossible (input));
-        send.setBackground (Background.EMPTY);
-        send.setCursor (Cursor.HAND);
-        
-        Button smile = SceneComponent.SMILE.get (scene);
-        smile.setGraphic (manager.getSharedContext ().getMessageInterpreter ()
-                                 .getIcon ("smile", 24, 24));
-        smile.setBackground (Background.EMPTY);
-        smile.setCursor (Cursor.HAND);
-        
-        Button attach = SceneComponent.ATTACH.get (scene);
-        attach.setBackground (Background.EMPTY);
-        attach.setCursor (Cursor.HAND);
-        */
     }
     
     private void updateClockLine (ActionEvent actionEvent) {
@@ -280,12 +283,13 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
             Tab tab = openedTabs.get (title);
             if (tab != null) { return tab; }
             
-            final Tab created = new Tab (title, content);
+            final DetachableTab created = new DetachableTab (title, content);
+            //created.setOnCloseRequest (we -> System.out.println (we.getSource ()));
             created.setOnClosed (this::onTabClosed);
             openedTabs.putIfAbsent (title, created);
             
             Platform.runLater (() -> {
-                TabPane conversations = SceneComponent.CONVERSATIONS.get (scene);
+                DetachableTabPane conversations = SceneComponent.CONVERSATIONS.get (scene);
                 conversations.getTabs ().add (created);
             });
             

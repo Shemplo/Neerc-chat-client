@@ -37,6 +37,8 @@ public abstract class AbsTabContent extends VBox {
     private static final KeyCodeCombination SEND_TRIGGER 
           = new KeyCodeCombination (ENTER, SHORTCUT_DOWN);
     
+    @Getter @Setter protected volatile boolean isTabOpened = false;
+    
     @Getter protected final boolean sendingMessageEnable;
     @Getter protected MessageAccess access = PUBLIC;
     @Getter protected final MainSceneHolder holder;
@@ -95,10 +97,14 @@ public abstract class AbsTabContent extends VBox {
                 });
             });
         }
+        
+        setOnMouseClicked (me -> isTabOpened = true);
     }
     
     protected void setContent (Node content) {
         Objects.requireNonNull (content);
+        
+        VBox.setVgrow (content, Priority.ALWAYS);
         getChildren ().set (1, content);
     }
     
@@ -128,5 +134,7 @@ public abstract class AbsTabContent extends VBox {
     }
     
     public abstract void onResponsibleTabOpened (Tab owner);
+    
+    public abstract void onResponsibleTabClosed (Tab owner);
     
 }
