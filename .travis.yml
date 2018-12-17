@@ -1,12 +1,20 @@
 language: java
 sudo: false
 
-script: 
+deploy:
+  provider: releases
+  api_key:
+    secure: HnBIgyXp7dSj+zIhPHot6qsPKRAo34PxXTu8r0bPrkr0oDsAJ+js1L0VCpSbKKtBmwNHgHgPeghvV9x2/ncohIkf3eQ0v3CaoqlLgSjwKlYaFLKOzos6Fsn9o0P0GhxljtlqRquMeQyiudOaPsz7XnmxAs/7dPjY4kywUQguUiOmSUKTfSFo3P0KzTWIMITtz71BirbGpIRpNq5K36CWuoQLWpB+N/QTWl769U2sbYOyCFgaaSXIy1ZT07RhiiGzxM3SQaRIC8Exvc5aSEX3Z/jIcp5Xgz3+qQW+xT7s5SgP5wAg5fo16Yst4XA4YhD5yb36nFPIe6nn3gjoL92B9hMSEellAypFoSFUuxart2xmGn0CcSOHnaqDl6kg1IE+xr1oSReAkuPXtmGnDkufvi1RUb6qt2+Rf7KkFdkdExL+KPZl3UdbgyIK5I1XAzls/2u4dLxh7x9xsNzo7FHYV22CIN5WEnJKZG2erLSNDh7NLNWQh3QzvHfuYvz/pnel37eemn7LMZZAl4V0DgtgnjNsnMzb0KiMsEg0mL/3vfwBetTprxB3GZ8XA+/eT4l3QyMg8F2qhmoKqQV+Fa1Rzsomf6MTd9pLBOfK6VwFIbdEmJusykbleNVV4wLP5EndUCV4s733rIh6vmzQhTq1C6CF9eu52S2vQNLVbwHadfQ=
+  file: target/release/chat.neerc.jar
+  on:
+    repo: Shemplo/Neerc-chat-client
+
+script:
   - mvn clean package cobertura:cobertura
-  
+
 after_success:
   - echo "Build was successful. $TRAVIS_TEST_RESULT"
   - bash <(curl -s https://codecov.io/bash)
-  
+
 after_failure:
   - echo "Build was failed"
