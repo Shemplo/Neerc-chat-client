@@ -18,31 +18,22 @@ import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.parts.Resourcepart;
 import org.jxmpp.stringprep.XmppStringprepException;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ru.shemplo.chat.neerc.config.ConfigStorage;
-import ru.shemplo.chat.neerc.gfx.ClientAdapter;
 import ru.shemplo.chat.neerc.network.ConnectionService;
 import ru.shemplo.chat.neerc.network.iq.CustomIQProvider;
-import ru.shemplo.snowball.annot.Cooler;
-import ru.shemplo.snowball.annot.Init;
 import ru.shemplo.snowball.annot.Snowflake;
 
 @Slf4j
 @Snowflake
-@NoArgsConstructor (access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public final class BaseConnectionListener extends AbstractConnectionListener {
-
-    @Cooler public static BaseConnectionListener shapeChatConnectionListener () {
-        return new BaseConnectionListener ();
-    }
     
-    @Init private ConnectionService connectionService;
-    @Init private CustomIQProvider customIQProvider;
-    @Init private ClientAdapter clientAdapter;
-    @Init private ConfigStorage configStorage;
+    private ConnectionService connectionService;
+    private CustomIQProvider customIQProvider;
+    private ConfigStorage configStorage;
     
     @Getter private volatile ConnectionStatus 
         currentState = ConnectionStatus.DISCONNECTED;
@@ -96,7 +87,7 @@ public final class BaseConnectionListener extends AbstractConnectionListener {
     
     @Override
     public void authenticated (XMPPConnection connection, boolean resumed) {
-        changeStatusAndNotify (CONNECTING, "Authentificating...");
+        changeStatusAndNotify (CONNECTING, "Authentificating in chat room...");
         
         EntityBareJid jid = connectionService.prepareEntityJid ();
         MultiUserChat chat = MultiUserChatManager

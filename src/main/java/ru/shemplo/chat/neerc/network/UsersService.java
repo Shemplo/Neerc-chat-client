@@ -12,29 +12,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import ru.shemplo.chat.neerc.config.ConfigStorage;
 import ru.shemplo.chat.neerc.enities.MessageEntity;
 import ru.shemplo.chat.neerc.enities.PresenceMessageEntity;
 import ru.shemplo.chat.neerc.enities.UserEntity;
 import ru.shemplo.chat.neerc.enities.UserEntity.OnlineStatus;
 import ru.shemplo.chat.neerc.enities.UserEntity.UserPower;
-import ru.shemplo.chat.neerc.gfx.ClientAdapter;
 import ru.shemplo.chat.neerc.network.listeners.UserPresenceListener;
-import ru.shemplo.snowball.annot.Cooler;
-import ru.shemplo.snowball.annot.Init;
 import ru.shemplo.snowball.annot.Snowflake;
 import ru.shemplo.snowball.utils.ColorManip;
 
 @Snowflake
 public class UsersService {
     
-    @Cooler public static UsersService shapeUsersService () {
-        return new UsersService ();
-    }
-    
-    @Init private MessageService messageService;
-    @Init private ClientAdapter clientAdapter;
-    @Init private ConfigStorage configStorage;
+    private MessageService messageService;
     
     private final ConcurrentMap <String, UserEntity> 
         users = new ConcurrentHashMap <> ();

@@ -11,25 +11,19 @@ import org.jivesoftware.smack.util.StringUtils;
 
 import ru.shemplo.chat.neerc.config.ConfigStorage;
 import ru.shemplo.chat.neerc.enities.MessageEntity;
-import ru.shemplo.chat.neerc.enities.TaskEntity;
 import ru.shemplo.chat.neerc.enities.MessageEntity.MessageAccess;
+import ru.shemplo.chat.neerc.enities.TaskEntity;
 import ru.shemplo.chat.neerc.network.iq.CustomIQProvider;
 import ru.shemplo.chat.neerc.network.listeners.TasksStatusListener;
-import ru.shemplo.snowball.annot.Cooler;
-import ru.shemplo.snowball.annot.Init;
 import ru.shemplo.snowball.annot.Snowflake;
 
 @Snowflake
 public class TasksService {
     
-    @Cooler public static TasksService shapeTasksService () {
-        return new TasksService ();
-    }
-    
-    @Init private CustomIQProvider customIQProvider;
-    @Init private MessageService messageService;
-    @Init private ConfigStorage configStorage;
-    @Init private UsersService usersService;
+    private CustomIQProvider customIQProvider;
+    private MessageService messageService;
+    private ConfigStorage configStorage;
+    private UsersService usersService;
     
     private final Object STUB_OBJECT = new Object ();
     private final ConcurrentMap <TasksStatusListener, Object> 

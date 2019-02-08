@@ -23,18 +23,12 @@ import javafx.scene.text.TextFlow;
 import ru.shemplo.chat.neerc.enities.MessageEntity;
 import ru.shemplo.chat.neerc.enities.PresenceMessageEntity;
 import ru.shemplo.chat.neerc.network.UsersService;
-import ru.shemplo.snowball.annot.Cooler;
-import ru.shemplo.snowball.annot.Init;
 import ru.shemplo.snowball.annot.Snowflake;
 
 @Snowflake
 public class MessageInterpreter {
-
-    @Cooler public static MessageInterpreter shapeMessageInterpreter () {
-        return new MessageInterpreter ();
-    }
     
-    @Init private UsersService usersService;
+    private UsersService usersService;
     
     public final Pane interpret (MessageEntity message) {
         VBox lines = new VBox ();

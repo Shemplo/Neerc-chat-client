@@ -11,22 +11,19 @@ import org.xmlpull.v1.XmlPullParser;
 
 import ru.shemplo.chat.neerc.config.ConfigStorage;
 import ru.shemplo.chat.neerc.network.ConnectionService;
-import ru.shemplo.snowball.annot.Cooler;
-import ru.shemplo.snowball.annot.Init;
 import ru.shemplo.snowball.annot.Snowflake;
-import ru.shemplo.snowball.annot.processor.Snowball;
 
-@Snowflake
 public class CustomIQProvider extends IQProvider <AbsCustomIQ> {
     
-    @Cooler public static CustomIQProvider shapeCustomIQProvider () {
+    @Snowflake
+    public static CustomIQProvider shapeCustomIQProvider () {
         CustomIQProvider provider = new CustomIQProvider ();
-        Snowball.runOnInited (provider::_initProvider);
+        //Snowball.runOnInited (provider::_initProvider);
         return provider;
     }
     
-    @Init private ConnectionService connectionService;
-    @Init private ConfigStorage configStorage;
+    private ConnectionService connectionService;
+    private ConfigStorage configStorage;
     
     private void _initProvider () {
         final String namespace = prepareNamespace ();

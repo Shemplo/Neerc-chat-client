@@ -18,9 +18,6 @@ import ru.shemplo.chat.neerc.annot.IQRouteDestination;
 import ru.shemplo.chat.neerc.annot.MessageRouteDestination;
 import ru.shemplo.chat.neerc.annot.PresenceRouteDestination;
 import ru.shemplo.chat.neerc.config.ConfigStorage;
-import ru.shemplo.chat.neerc.gfx.ClientAdapter;
-import ru.shemplo.snowball.annot.Cooler;
-import ru.shemplo.snowball.annot.Init;
 import ru.shemplo.snowball.annot.Snowflake;
 import ru.shemplo.snowball.annot.processor.Snowball;
 import ru.shemplo.snowball.stuctures.Pair;
@@ -30,13 +27,7 @@ import ru.shemplo.snowball.utils.ClasspathUtils;
 @Snowflake
 public class DefaultPacketRouter extends AbsPacketRouter {
     
-    @Cooler public static DefaultPacketRouter shapeDefaultMessageRouter () {
-        DefaultPacketRouter packetRouter = new DefaultPacketRouter ();
-        return packetRouter;
-    }
-    
-    @Init private ClientAdapter clientAdapter;
-    @Init private ConfigStorage configStorage;
+    private ConfigStorage configStorage;
     
     private final Map <Class <? extends Annotation>, List <Method>> 
         ROUTE_METHODS = new HashMap <> ();
@@ -204,7 +195,8 @@ public class DefaultPacketRouter extends AbsPacketRouter {
             Map <String, ? super Objects> parameters) {
         callMethod.ifPresent (method -> {
             final Class <? extends DestinationValue> destAnnotation = DestinationValue.class;
-            final Object context = Snowball.getSnowflakeFor (method.getDeclaringClass ());
+            final Object context = Snowball.getContext ()
+                                 . getSnowflakeFor (method.getDeclaringClass ());
             
             try {
                 Object [] arguments = Arrays.stream (method.getParameters ())

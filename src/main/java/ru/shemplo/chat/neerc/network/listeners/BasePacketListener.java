@@ -11,24 +11,17 @@ import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.Stanza;
 
-import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.shemplo.chat.neerc.network.control.PacketRouter;
-import ru.shemplo.snowball.annot.Cooler;
-import ru.shemplo.snowball.annot.Init;
 import ru.shemplo.snowball.annot.Snowflake;
 
 @Snowflake
-@NoArgsConstructor (access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class BasePacketListener implements StanzaListener {
-
-    @Cooler public static BasePacketListener shapeChatPacketListener () {
-        return new BasePacketListener ();
-    }
     
     private final List <PacketRouter> routers = new ArrayList <> ();
     
-    @Init private PacketRouter messageRouter;
+    private PacketRouter messageRouter;
     
     @Override
     public void processStanza (Stanza packet) throws NotConnectedException, 

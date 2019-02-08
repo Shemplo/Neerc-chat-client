@@ -7,29 +7,20 @@ import org.jivesoftware.smack.XMPPException;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import ru.shemplo.chat.neerc.config.ConfigStorage;
 import ru.shemplo.chat.neerc.config.SharedContext;
 import ru.shemplo.chat.neerc.enities.MessageEntity;
 import ru.shemplo.chat.neerc.enities.MessageEntity.MessageAccess;
 import ru.shemplo.chat.neerc.network.ConnectionService;
-import ru.shemplo.chat.neerc.network.UsersService;
-import ru.shemplo.snowball.annot.Cooler;
-import ru.shemplo.snowball.annot.Init;
 import ru.shemplo.snowball.annot.Snowflake;
 
 @Slf4j
 @Snowflake
 public class ClientAdapter {
- 
-    @Cooler public static ClientAdapter shapeClientAdapter () {
-        return new ClientAdapter ();
-    }
     
-    @Getter @Init private SharedContext sharedContext;
-    @Init private ConnectionService connectionService;
-    @Init private ConfigStorage configStorage;
-    @Init private UsersService usersService;
+    @Getter private SharedContext sharedContext;
+    private ConnectionService connectionService;
     
+    @Snowflake (manual = true) 
     private WindowManager windowManager;
     
     public void clientWindowInitialized (WindowManager manager) {
@@ -52,8 +43,10 @@ public class ClientAdapter {
         }
     }
     
-    public void performCloseConnection () {
-        connectionService.disconnect ();
+    public synchronized void performCloseConnection () {
+        if (connectionService != null) {            
+            connectionService.disconnect ();
+        }
     }
     
     public void sendMessage (MessageEntity message) {

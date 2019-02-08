@@ -11,26 +11,20 @@ import ru.shemplo.chat.neerc.network.TasksService;
 import ru.shemplo.chat.neerc.network.UsersService;
 import ru.shemplo.chat.neerc.network.exten.CustomExtensionProvider;
 import ru.shemplo.chat.neerc.network.iq.CustomIQProvider;
-import ru.shemplo.snowball.annot.Cooler;
-import ru.shemplo.snowball.annot.Init;
 import ru.shemplo.snowball.annot.Snowflake;
 
 @Snowflake
 public class SharedContext {
     
-    @Cooler public static SharedContext shapeShatedContext () {
-        return new SharedContext ();
-    }
-    
-    @Getter @Init private CustomExtensionProvider customExtensionProvider;
-    @Getter @Init private ConnectionListener connectionListener;
-    @Getter @Init private MessageInterpreter messageInterpreter;
-    @Getter @Init private CustomIQProvider customIQProvider;
-    @Getter @Init private StanzaListener packetListener;
-    @Getter @Init private MessageService messageHistory;
-    @Getter @Init private ClientAdapter clientAdapter;
-    @Getter @Init private ConfigStorage configStorage;
-    @Getter @Init private TasksService tasksService;
-    @Getter @Init private UsersService usersService;
+    @Getter private CustomExtensionProvider customExtensionProvider;
+    @Getter private ConnectionListener connectionListener;
+    @Getter private MessageInterpreter messageInterpreter;
+    @Getter private CustomIQProvider customIQProvider;
+    @Getter private StanzaListener packetListener;
+    @Getter private MessageService messageHistory;
+    @Getter private ClientAdapter clientAdapter;
+    @Getter private ConfigStorage configStorage;
+    @Getter private TasksService tasksService;
+    @Getter private UsersService usersService;
     
 }

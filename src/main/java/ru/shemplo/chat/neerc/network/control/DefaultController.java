@@ -16,35 +16,25 @@ import ru.shemplo.chat.neerc.annot.PresenceRouteDestination;
 import ru.shemplo.chat.neerc.config.ConfigStorage;
 import ru.shemplo.chat.neerc.enities.MessageEntity;
 import ru.shemplo.chat.neerc.enities.UserEntity.OnlineStatus;
-import ru.shemplo.chat.neerc.gfx.ClientAdapter;
 import ru.shemplo.chat.neerc.network.MessageService;
 import ru.shemplo.chat.neerc.network.TasksService;
 import ru.shemplo.chat.neerc.network.UsersService;
 import ru.shemplo.chat.neerc.network.exten.ClockExtension;
-import ru.shemplo.chat.neerc.network.exten.CustomExtensionProvider;
 import ru.shemplo.chat.neerc.network.exten.editor.EditMessageExtension;
 import ru.shemplo.chat.neerc.network.iq.CustomIQProvider;
 import ru.shemplo.chat.neerc.network.iq.TasksListIQ;
 import ru.shemplo.chat.neerc.network.iq.UsersListIQ;
-import ru.shemplo.snowball.annot.Cooler;
-import ru.shemplo.snowball.annot.Init;
 import ru.shemplo.snowball.annot.Snowflake;
 
 @Slf4j
 @Snowflake
 public class DefaultController {
     
-    @Cooler public static DefaultController shapeDefaultController () {
-        return new DefaultController ();
-    }
-    
-    @Init private CustomExtensionProvider customExtensionProvider;
-    @Init private CustomIQProvider customIQProvider;
-    @Init private MessageService messageService;
-    @Init private ClientAdapter clientAdapter;
-    @Init private ConfigStorage configStorage;
-    @Init private TasksService tasksService;
-    @Init private UsersService usersService;
+    private CustomIQProvider customIQProvider;
+    private MessageService messageService;
+    private ConfigStorage configStorage;
+    private TasksService tasksService;
+    private UsersService usersService;
     
     @MessageRouteDestination (namespace = "conference\\..+", room = "neerc")
     public void controllPublicChatMessage (

@@ -14,24 +14,19 @@ import org.xmlpull.v1.XmlPullParser;
 import ru.shemplo.chat.neerc.config.ConfigStorage;
 import ru.shemplo.chat.neerc.network.ConnectionService;
 import ru.shemplo.chat.neerc.network.exten.editor.EditMessageExtension;
-import ru.shemplo.chat.neerc.network.iq.CustomIQProvider;
-import ru.shemplo.snowball.annot.Cooler;
-import ru.shemplo.snowball.annot.Init;
 import ru.shemplo.snowball.annot.Snowflake;
-import ru.shemplo.snowball.annot.processor.Snowball;
 
-@Snowflake
 public class CustomExtensionProvider extends ExtensionElementProvider <AbsCustomExtensionElement> {
 
-    @Cooler public static CustomExtensionProvider shapeClockExtensionProvider () {
+    @Snowflake
+    public static CustomExtensionProvider shapeClockExtensionProvider () {
         CustomExtensionProvider provider = new CustomExtensionProvider ();
-        Snowball.runOnInited (provider::_initProvider);
+        //Snowball.runOnInited (provider::_initProvider);
         return provider;
     }
     
-    @Init private ConnectionService connectionService;
-    @Init private CustomIQProvider customIQProvider;
-    @Init private ConfigStorage configStorage;
+    private ConnectionService connectionService;
+    private ConfigStorage configStorage;
     
     static final EditMessageExtension edit = new EditMessageExtension ();
     static final ClockExtension clock = new ClockExtension ();

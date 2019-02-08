@@ -7,12 +7,11 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import ru.shemplo.chat.neerc.network.ConnectionService;
-import ru.shemplo.snowball.annot.processor.Snowball;
 
 public abstract class AbsCustomIQ extends IQ {
     
     private static final ConnectionService CONNECTION_SERVICE
-          = Snowball.getSnowflakeFor (ConnectionService.class);
+          = null;
     
     public AbsCustomIQ (String name) {
         this (name, "query");

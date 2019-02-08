@@ -14,19 +14,13 @@ import ru.shemplo.chat.neerc.enities.MessageEntity;
 import ru.shemplo.chat.neerc.gfx.ClientAdapter;
 import ru.shemplo.chat.neerc.network.exten.ClockExtension.ClockStatus;
 import ru.shemplo.chat.neerc.network.listeners.MessageListener;
-import ru.shemplo.snowball.annot.Cooler;
-import ru.shemplo.snowball.annot.Init;
 import ru.shemplo.snowball.annot.Snowflake;
 import ru.shemplo.snowball.stuctures.Trio;
 
 @Snowflake
 public class MessageService {
     
-    @Cooler public static MessageService shapeMessageHistory () {
-        return new MessageService ();
-    }
-    
-    @Init private ClientAdapter clientAdapter;
+    private ClientAdapter clientAdapter;
     
     private final Set <MessageListener> listeners 
           = ConcurrentHashMap.newKeySet ();

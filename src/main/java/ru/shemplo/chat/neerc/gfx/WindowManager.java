@@ -71,6 +71,7 @@ public class WindowManager extends Application
     
     public void setSharedContext (SharedContext sharedContext) {
         this.sharedContext = sharedContext;
+        assert sharedContext != null;
         
         this.connectionListener = sharedContext.getConnectionListener ();
         this.configStorage = sharedContext.getConfigStorage ();
@@ -110,7 +111,12 @@ public class WindowManager extends Application
         stage.sizeToScene ();
         stage.show ();
         
-        stage.setOnCloseRequest (__ -> sharedContext.getClientAdapter ().performCloseConnection ());
+        stage.setOnCloseRequest (__ -> {
+            if (sharedContext != null) {
+                sharedContext.getClientAdapter ()
+                . performCloseConnection ();
+            }
+        });
         //Logging.getCSSLogger ().setLevel (Level.OFF);
     }
     

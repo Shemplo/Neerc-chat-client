@@ -34,30 +34,24 @@ import ru.shemplo.chat.neerc.gfx.ClientAdapter;
 import ru.shemplo.chat.neerc.network.listeners.BaseConnectionListener;
 import ru.shemplo.chat.neerc.network.listeners.BasePacketListener;
 import ru.shemplo.chat.neerc.network.listeners.ChatPacketsFilter;
-import ru.shemplo.snowball.annot.Cooler;
-import ru.shemplo.snowball.annot.Init;
-import ru.shemplo.snowball.annot.Polar;
 import ru.shemplo.snowball.annot.Snowflake;
+import ru.shemplo.snowball.annot.Wind;
 
 @Slf4j
 @Snowflake
 @SuppressWarnings ("unused")
-@Polar (scan = {BaseConnectionListener.class, 
-                BasePacketListener.class,
-                ChatPacketsFilter.class})
 public class ConnectionService {
     
-    @Cooler public static ConnectionService shapeConnectionService () {
-        return new ConnectionService ();
-    }
+    private ConnectionListener connectionListener;
+    private StanzaListener stanzaListener;
+    private ClientAdapter clientAdapter;
+    private ConfigStorage configStorage;
+    private StanzaFilter stanzaFilter;
     
-    @Init private ConnectionListener connectionListener;
-    @Init private StanzaListener stanzaListener;
-    @Init private ClientAdapter clientAdapter;
-    @Init private ConfigStorage configStorage;
-    @Init private StanzaFilter stanzaFilter;
-    
+    @Snowflake (manual = true)
     @Getter private volatile AbstractXMPPConnection connection;
+    
+    @Snowflake (manual = true)
     @Setter private MultiUserChat multiUserChat;
     
     private AbstractXMPPConnection prepareConnection () throws XmppStringprepException {

@@ -10,14 +10,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-import ru.shemplo.snowball.annot.Cooler;
 import ru.shemplo.snowball.annot.Snowflake;
 import ru.shemplo.snowball.utils.StringManip;
 
-@Snowflake
 public class ConfigStorage {
     
-    @Cooler public static ConfigStorage shapeConfigStorage () {
+    @Snowflake 
+    public static ConfigStorage shapeConfigStorage () {
         return new ConfigStorage ();
     }
     
