@@ -140,14 +140,4 @@ public class UsersService {
         });
     }
     
-    private final Random random = new Random ();
-    
-    private final Color getRandomColor (int from, int to) {
-        return javafx.scene.paint.Color.rgb (
-                from + random.nextInt (to - from), 
-                from + random.nextInt (to - from), 
-                from + random.nextInt (to - from)
-             );
-    }
-    
 }

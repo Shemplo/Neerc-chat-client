@@ -4,7 +4,7 @@
 
   <groupId>ru.shemplo</groupId>
   <artifactId>chat.neerc</artifactId>
-  <version>0.1.13</version>
+  <version>0.1.14</version>
   <packaging>jar</packaging>
 
   <properties>
