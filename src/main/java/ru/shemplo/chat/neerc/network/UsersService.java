@@ -5,6 +5,7 @@ import static java.util.Collections.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -19,7 +20,6 @@ import ru.shemplo.chat.neerc.enities.UserEntity.OnlineStatus;
 import ru.shemplo.chat.neerc.enities.UserEntity.UserPower;
 import ru.shemplo.chat.neerc.network.listeners.UserPresenceListener;
 import ru.shemplo.snowball.annot.Snowflake;
-import ru.shemplo.snowball.utils.ColorManip;
 
 @Snowflake
 public class UsersService {
@@ -116,17 +116,27 @@ public class UsersService {
     
     public Color getColorForName (String name) {
         if (!colors.containsKey (name)) {
-            Color color = ColorManip.getRandomColor (32, 160);
+            Color color = getRandomColor (32, 160);
             colors.putIfAbsent (name, color);
         }
         
         return colors.get (name);
     }
     
+    private static final Random RANDOM = new Random ();
+    
+    private Color getRandomColor (int from, int to) {
+        return Color.rgb (
+                from + RANDOM.nextInt (to - from), 
+                from + RANDOM.nextInt (to - from), 
+                from + RANDOM.nextInt (to - from)
+             );
+    }
+    
     public void generateColorsAgain () {
         colors.keySet ().forEach (name -> {
             colors.computeIfPresent (name, 
-                (k, v) -> ColorManip.getRandomColor (32, 160));
+                (k, v) -> getRandomColor (32, 160));
         });
     }
     

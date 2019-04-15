@@ -120,7 +120,8 @@ public class ConnectionService {
         try {            
             this.connection = prepareConnection ();
             getConnection ().connect ();
-        } catch (ConnectionException | NoResponseException es) {
+        } catch (ConnectionException | NoResponseException
+              | IllegalStateException es) {
             connectionListener.connectionClosedOnError (es);
         }
     }

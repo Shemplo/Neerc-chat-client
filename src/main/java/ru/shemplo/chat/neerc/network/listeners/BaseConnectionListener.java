@@ -77,6 +77,7 @@ public final class BaseConnectionListener extends AbstractConnectionListener {
                 ((AbstractXMPPConnection) connection).login ();
             } catch (XMPPException | SmackException 
                   | IOException | InterruptedException es) {
+                changeStatusAndNotify (CONNECTED, es.getMessage ());
                 log.error ("Failed to login on server", es);
                 throw new IllegalStateException (es);
             }
@@ -107,8 +108,9 @@ public final class BaseConnectionListener extends AbstractConnectionListener {
         } catch (XmppStringprepException | NotAMucServiceException 
               | XMPPErrorException | NoResponseException 
               | NotConnectedException | InterruptedException xse) {
+            changeStatusAndNotify (CONNECTED, xse.getMessage ());
             log.error ("Failed to join chat room", xse);
-            throw new IllegalStateException (xse);
+            //throw new IllegalStateException (xse);
         }
         
         connectionService.setMultiUserChat (chat);
