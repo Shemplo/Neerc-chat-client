@@ -167,12 +167,12 @@ public class DefaultPacketRouter extends AbsPacketRouter {
         
         final Class <? extends IQRouteDestination> routeAnnotation = IQRouteDestination.class;
         Optional <Method> callMethod = ROUTE_METHODS.get (routeAnnotation).stream ()
-                                     . map (m -> Pair.mp (m, m.getAnnotation (routeAnnotation)))
-                                     . filter (p -> type.equals (p.S.meessageType ()))
-                                     . filter (p -> name.matches   (p.S.name ()))
-                                     . filter (p -> namespace.matches (p.S.namespace ()))
-                                     . filter (p -> from.matches (p.S.from ()))
-                                     . map (p -> p.F)
+                                     . map       (m -> Pair.mp (m, m.getAnnotation (routeAnnotation)))
+                                     . filter    (p -> type.equals (p.S.meessageType ()))
+                                     . filter    (p -> name.matches   (p.S.name ()))
+                                     . filter    (p -> namespace.matches (p.S.namespace ()))
+                                     . filter    (p -> from.matches (p.S.from ()))
+                                     . map       (p -> p.F)
                                      . findFirst ();
         
         final Map <String, ? super Object> values = new HashMap <> ();
@@ -209,6 +209,7 @@ public class DefaultPacketRouter extends AbsPacketRouter {
                 method.invoke (context, arguments);
             } catch (IllegalAccessException | IllegalArgumentException 
                   | InvocationTargetException __) {
+                __.printStackTrace ();
                 // TODO: handle exception
             }
         });

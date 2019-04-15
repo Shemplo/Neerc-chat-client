@@ -11,6 +11,7 @@ import org.xmlpull.v1.XmlPullParser;
 
 import ru.shemplo.chat.neerc.config.ConfigStorage;
 import ru.shemplo.chat.neerc.network.ConnectionService;
+import ru.shemplo.snowball.annot.PostShaped;
 import ru.shemplo.snowball.annot.Snowflake;
 
 public class CustomIQProvider extends IQProvider <AbsCustomIQ> {
@@ -25,7 +26,7 @@ public class CustomIQProvider extends IQProvider <AbsCustomIQ> {
     private ConnectionService connectionService;
     private ConfigStorage configStorage;
     
-    private void _initProvider () {
+    @PostShaped private void _initProvider () {
         final String namespace = prepareNamespace ();
         ProviderManager.addIQProvider ("query", namespace.concat ("#users"), this);
         ProviderManager.addIQProvider ("query", namespace.concat ("#tasks"), this);

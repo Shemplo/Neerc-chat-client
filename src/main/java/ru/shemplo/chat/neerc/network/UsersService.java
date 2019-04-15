@@ -123,6 +123,16 @@ public class UsersService {
         return colors.get (name);
     }
     
+    private static final Random RANDOM = new Random ();
+    
+    private Color getRandomColor (int from, int to) {
+        return Color.rgb (
+                from + RANDOM.nextInt (to - from), 
+                from + RANDOM.nextInt (to - from), 
+                from + RANDOM.nextInt (to - from)
+             );
+    }
+    
     public void generateColorsAgain () {
         colors.keySet ().forEach (name -> {
             colors.computeIfPresent (name, 
