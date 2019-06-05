@@ -15,6 +15,10 @@
 4. Go to `release` directory in  `target`
 5. Run `jar` file with `java -jar chat.neerc.jar`
 
+### :desktop_computer: Screenshot
+
+![](screenshot.jpg)
+
 ### :man_technologist: Contributors
 [![](https://sourcerer.io/fame/Shemplo/Shemplo/Neerc-chat-client/images/0)](https://sourcerer.io/fame/Shemplo/Shemplo/Neerc-chat-client/links/0)
 [![](https://sourcerer.io/fame/Shemplo/Shemplo/Neerc-chat-client/images/1)](https://sourcerer.io/fame/Shemplo/Shemplo/Neerc-chat-client/links/1)
