@@ -14,10 +14,12 @@ public enum SceneComponent implements SceneContainer {
     CONNECTION_ICON   ("connection_status_icon"),
     CONNECTION_STATUS ("connection_status"),
     
-    USERS_SCROLL ("users_horizon"),
-    USERS        ("users"),
-    JOIN_ROOM    ("join_room"),
-    ROOM_NAME    ("room_name"),
+    USERS_SCROLL_H ("users_horizon_h"),
+    USERS_SCROLL_V ("users_horizon_v"),
+    USERS_H        ("users_h"),
+    USERS_V        ("users_v"),
+    JOIN_ROOM      ("join_room"),
+    ROOM_NAME      ("room_name"),
     
     CONVERSATIONS ("conversations"),
     

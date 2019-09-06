@@ -76,7 +76,7 @@ public abstract class AbsSceneHolder implements SceneHolder {
         new Thread (() -> {
             try { Thread.sleep (500); } catch (Exception e) { return; }
             manager.switchScene (to);
-        }).start ();;
+        }).start ();
     }
     
     @Override

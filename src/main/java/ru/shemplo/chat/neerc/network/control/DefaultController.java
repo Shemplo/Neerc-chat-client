@@ -31,10 +31,12 @@ import ru.shemplo.snowball.annot.Snowflake;
 public class DefaultController {
     
     private CustomIQProvider customIQProvider;
+    private EditMessageExtension editDummy;
     private MessageService messageService;
     private ConfigStorage configStorage;
     private TasksService tasksService;
     private UsersService usersService;
+    private ClockExtension clockDummy;
     
     @MessageRouteDestination (namespace = "conference\\..+", room = "neerc")
     public void controllPublicChatMessage (
@@ -83,22 +85,21 @@ public class DefaultController {
     @MessageRouteDestination (namespace = "neerc\\..+", body = ".+\\((\\w|-)+\\).+", 
                               room = "", type = Type.normal)
     public void controllTaskChangeMessage (
-            @DestinationValue ("body")   String        body,
-            @DestinationValue ("time")   LocalDateTime time,
-            @DestinationValue ("author") String        author,
-            @DestinationValue ("id")     String        id) {
+        @DestinationValue ("body")   String        body,
+        @DestinationValue ("time")   LocalDateTime time,
+        @DestinationValue ("author") String        author,
+        @DestinationValue ("id")     String        id
+    ) {
         //System.out.println (String.format ("public `%s: %s`", author, body));
         customIQProvider.query ("tasks");
     }
-    
-    private static final EditMessageExtension editDummy = new EditMessageExtension ();
-    private static final ClockExtension clockDummy = new ClockExtension ();
     
     @MessageRouteDestination (namespace = "neerc\\..+", body = ".+clock.+", 
                               room = "", type = Type.normal)
     public void controllClockSynchronization (
             @DestinationValue ("time")    LocalDateTime time,
-            @DestinationValue ("message") Message       message) {
+            @DestinationValue ("message") Message       message
+    ) {
         ClockExtension clock = message.getExtension (clockDummy.getElementName (), 
                                                      clockDummy.getNamespace ());
         messageService.synchronizeClock (clock.getTime (), clock.getTotal (), 

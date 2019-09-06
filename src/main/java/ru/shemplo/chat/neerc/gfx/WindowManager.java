@@ -102,7 +102,7 @@ public class WindowManager extends Application
         stage.setMinWidth (725); stage.setMinHeight (675);
         
         stage.setScene (new Scene (new Pane ()));
-        stage.setTitle ("Neerc chat");
+        stage.setTitle ("Neerc chat | build 0.1.15");
         
         switchScene (ClientScene.MAIN);
         //stage.setY ((screen.height - stage.getHeight ()) / 2); 

@@ -45,61 +45,74 @@
                    styleClass="splitter"
                    dividerPositions="1.0">
             <!-- was just a HBox -->
-            <VBox minWidth="350"
-                  styleClass="left-column">
-                <!--
-                <VBox>
+            <HBox>
+            	<VBox minWidth="150">
                     <ScrollPane vbarPolicy="NEVER"
                                 hbarPolicy="NEVER"
                                 pannable="true"
-                                fx:id="users_horizon"
-                                HBox.hgrow="ALWAYS">
+                                fx:id="users_horizon_v"
+                                VBox.vgrow="ALWAYS">
                         <VBox alignment="CENTER_LEFT"
                               spacing="8"
-                              fx:id="users">
+                              fx:id="users_v">
                             <padding>
                                 <Insets top="4" right="4" bottom="4" left="8"/>
                             </padding>
                         </VBox>
                     </ScrollPane>
-                </VBox>
-                -->
-                <HBox styleClass="top-left-panel">
-                    <padding>
-                        <Insets top="4"/>
-                    </padding>
-                    <ScrollPane vbarPolicy="NEVER"
-                                hbarPolicy="NEVER"
-                                pannable="true"
-                                fx:id="users_horizon"
-                                HBox.hgrow="ALWAYS">
-                        <HBox alignment="CENTER_LEFT"
-                              spacing="8"
-                              fx:id="users">
-                            <padding>
-                                <Insets top="4" right="4" bottom="4" left="8"/>
-                            </padding>
-                        </HBox>
-                    </ScrollPane>
                     <Button minWidth="85"
                             styleClass="metal-button"
                             fx:id="join_room"
                             text="Join room">
-                        <HBox.margin>
-                            <Insets top="5" right="8" bottom="5" left="4"/>
-                        </HBox.margin>
+                        <VBox.margin>
+                            <Insets top="5" left="8" bottom="10" right="4"/>
+                        </VBox.margin>
                     </Button>
-                </HBox>
-                <VBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
-                    <!-- this is KOSTYL for HiDPI screens -->
-                    <DetachableTabPane fx:id="conversations"
-                                       VBox.vgrow="ALWAYS"
-                                       prefHeight="9999"
-                                       minHeight="200"
-                                       minWidth="350">
-                    </DetachableTabPane>
                 </VBox>
-            </VBox>
+                
+	            <VBox minWidth="350"
+	                  styleClass="left-column"
+	                  HBox.hgrow="ALWAYS">
+	                
+	                <!--
+	                <HBox styleClass="top-left-panel">
+	                    <padding>
+	                        <Insets top="4"/>
+	                    </padding>
+	                    <ScrollPane vbarPolicy="NEVER"
+	                                hbarPolicy="NEVER"
+	                                pannable="true"
+	                                fx:id="users_horizon_h"
+	                                HBox.hgrow="ALWAYS">
+	                        <HBox alignment="CENTER_LEFT"
+	                              spacing="8"
+	                              fx:id="users_h">
+	                            <padding>
+	                                <Insets top="4" right="4" bottom="4" left="8"/>
+	                            </padding>
+	                        </HBox>
+	                    </ScrollPane>
+	                    <Button minWidth="85"
+	                            styleClass="metal-button"
+	                            fx:id="join_room"
+	                            text="Join room">
+	                        <HBox.margin>
+	                            <Insets top="5" right="8" bottom="5" left="4"/>
+	                        </HBox.margin>
+	                    </Button>
+	                </HBox>
+	                -->
+	                <VBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+	                    <!-- this is KOSTYL for HiDPI screens -->
+	                    <DetachableTabPane fx:id="conversations"
+	                                       VBox.vgrow="ALWAYS"
+	                                       prefHeight="9999"
+	                                       minHeight="200"
+	                                       minWidth="350">
+	                    </DetachableTabPane>
+	                </VBox>
+	            </VBox>
+            </HBox>
             <VBox minWidth="350">
                 <HBox spacing="4"
                       fx:id="clock_horizon">

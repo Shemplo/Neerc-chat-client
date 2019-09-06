@@ -100,6 +100,7 @@ public class ConnectionService {
             
             return context;
         } catch (IOException | GeneralSecurityException es) {
+            log.error (es.getMessage ());
             es.printStackTrace ();
         }
         
@@ -123,6 +124,7 @@ public class ConnectionService {
         } catch (ConnectionException | NoResponseException
               | IllegalStateException es) {
             connectionListener.connectionClosedOnError (es);
+            log.error (es.getMessage ());
         }
     }
     
