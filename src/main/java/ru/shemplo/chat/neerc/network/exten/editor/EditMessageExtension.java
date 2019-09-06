@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.ToString;
 import ru.shemplo.chat.neerc.network.exten.AbsCustomExtensionElement;
 import ru.shemplo.chat.neerc.network.iq.XMLUtils;
+import ru.shemplo.snowball.annot.Snowflake;
 
 /**
  * <b>Extension:</b> SXS-0001 (<i>Edimes</i>).
@@ -79,6 +80,7 @@ import ru.shemplo.chat.neerc.network.iq.XMLUtils;
  *
  */
 @ToString
+@Snowflake
 public class EditMessageExtension extends AbsCustomExtensionElement {
 
     public static enum EditActionType {

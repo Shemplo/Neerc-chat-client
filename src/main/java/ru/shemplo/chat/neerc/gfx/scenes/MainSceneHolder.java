@@ -75,13 +75,24 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
     protected MainSceneHolder (WindowManager manager, Scene scene) {
         super (manager, scene);
         
-        ScrollPane usersScroll = SceneComponent.USERS_SCROLL.get (scene);
-        usersScroll.setBackground (Background.EMPTY);
-        usersScroll.setBorder (Border.EMPTY);
-        usersScroll.setOnScroll (se -> {
-            double hValue = usersScroll.getHvalue (), delta = se.getDeltaY ();
-            HBox users = SceneComponent.USERS.get (scene);
-            usersScroll.setHvalue (hValue - delta / users.getWidth ());
+        SceneComponent.USERS_SCROLL_H.<ScrollPane> safe (scene).ifPresent (usersScrollHorizontal -> {            
+            usersScrollHorizontal.setBackground (Background.EMPTY);
+            usersScrollHorizontal.setBorder (Border.EMPTY);
+            usersScrollHorizontal.setOnScroll (se -> {
+                double hValue = usersScrollHorizontal.getHvalue (), delta = se.getDeltaY () * 1.5;
+                HBox users = SceneComponent.USERS_H.get (scene);
+                usersScrollHorizontal.setHvalue (hValue - delta / users.getWidth ());
+            });
+        });
+        
+        SceneComponent.USERS_SCROLL_V.<ScrollPane> safe (scene).ifPresent (usersScrollVertical -> {
+            usersScrollVertical.setBackground (Background.EMPTY);
+            usersScrollVertical.setBorder (Border.EMPTY);
+            usersScrollVertical.setOnScroll (se -> {
+                double hValue = usersScrollVertical.getVvalue (), delta = se.getDeltaY () * 1.5;
+                VBox users = SceneComponent.USERS_V.get (scene);
+                usersScrollVertical.setVvalue (hValue - delta / users.getWidth ());
+            });            
         });
         
         /* init method */ makeDefaultTabs ();
@@ -169,8 +180,7 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
               . start (); // Not to block GUI thread
         });
         
-        Optional.ofNullable (SceneComponent.JOIN_ROOM.<Button> get (scene))
-                .ifPresent (button -> {
+        SceneComponent.JOIN_ROOM.<Button> safe (scene).ifPresent (button -> {
             button.setOnMouseClicked (__ -> {
                 Stage stage = new Stage (StageStyle.DECORATED);
                 stage.initModality (Modality.WINDOW_MODAL);

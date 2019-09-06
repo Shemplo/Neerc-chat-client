@@ -45,7 +45,7 @@ public class MainSceneListener implements UserPresenceListener, TasksStatusListe
                 . findFirst ()
                 . get ();
         final ImageView view = new ImageView (image);
-        SceneComponent.USERS.<HBox> safe (holder.getScene ())
+        SceneComponent.USERS_H.<HBox> safe (holder.getScene ())
                       .ifPresent (line -> {
             Platform.runLater (() -> {
                 line.getChildren ().stream ()
@@ -53,6 +53,16 @@ public class MainSceneListener implements UserPresenceListener, TasksStatusListe
                     .filter    (b -> b.getText ().equals (user))
                     .findFirst ()
                     .ifPresent (b -> b.setGraphic (view));
+            });
+        });
+        SceneComponent.USERS_V.<VBox> safe (holder.getScene ())
+                      .ifPresent (line -> {
+            Platform.runLater (() -> {
+              line.getChildren ().stream ()
+                  .map       (o -> (Button) o)
+                  .filter    (b -> b.getText ().equals (user))
+                  .findFirst ()
+                  .ifPresent (b -> b.setGraphic (view));
             });
         });
     }
@@ -72,7 +82,7 @@ public class MainSceneListener implements UserPresenceListener, TasksStatusListe
 
     @Override
     public void onUsersUpdated () {
-        SceneComponent.USERS.<HBox> safe (holder.getScene ())
+        SceneComponent.USERS_H.<HBox> safe (holder.getScene ())
                       .ifPresent (line -> {
             Platform.runLater (line.getChildren ()::clear);
             
@@ -98,6 +108,25 @@ public class MainSceneListener implements UserPresenceListener, TasksStatusListe
             . collect (Collectors.toList ());
             Platform.runLater (() -> line.getChildren ().addAll (buttons));
         });
+        SceneComponent.USERS_V.<VBox> safe (holder.getScene ()).ifPresent (line -> {
+            Platform.runLater (line.getChildren ()::clear);
+            
+            final UsersService usersService = holder.getManager ().getUsersService ();
+            List <Button> buttons = usersService.getUsers ().stream ().sorted (UE_COMPARATOR)
+               . map (u -> Pair.mp (u, u.getPower ().name ().toLowerCase ()))
+               . map (p -> p.applyS (n -> String.format ("status-%s", n))).map (p -> {
+                    Image status = Stream.of (p.F.getStatus ()).map (OnlineStatus::name).map (String::toLowerCase)
+                         . map (s -> String.format ("/gfx/user-%s.png", s)).map (Image::new).findFirst ().get ();
+                    final ImageView view = new ImageView (status);
+                    Button button = new Button (p.F.getName (), view);
+                    button.setOnMouseClicked (this::onUserButtonClick);
+                    button.getStyleClass ().add ("metal-button");
+                    button.getStyleClass ().add (p.S);
+                    button.setGraphicTextGap (8.0);
+                    return button;
+               }).collect (Collectors.toList ());
+            Platform.runLater ( () -> line.getChildren ().addAll (buttons));
+        });
     }
     
     private void onUserButtonClick (MouseEvent me) {
@@ -115,7 +144,7 @@ public class MainSceneListener implements UserPresenceListener, TasksStatusListe
     }
     
     private final ConcurrentMap <String, TaskTile> 
-    tasks = new ConcurrentHashMap <> (); 
+        tasks = new ConcurrentHashMap <> (); 
 
     @Override
     public synchronized void onTasksUpdated () {

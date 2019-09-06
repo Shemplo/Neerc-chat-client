@@ -42,10 +42,6 @@ public class DefaultPacketRouter extends AbsPacketRouter {
                       .entrySet ().stream ().map (Pair::fromMapEntry)
                       .map (p -> p.applyS (
                               list -> list.stream ().map (o -> (Method) o)
-                              /*
-                                    . filter (m -> Modifier.isPublic (m.getModifiers ())
-                                                && Modifier.isStatic (m.getModifiers ()))
-                                                */
                                     . collect (Collectors.toList ())
                            ))
                       .forEach (p -> ROUTE_METHODS.put (p.F, p.S));

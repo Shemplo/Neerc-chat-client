@@ -71,6 +71,7 @@ public final class BaseConnectionListener extends AbstractConnectionListener {
     @Override
     public void connected (XMPPConnection connection) {
         changeStatusAndNotify (CONNECTING, "Connecting to server...");
+        log.info ("Connecting to server...");
         
         if (connection instanceof AbstractXMPPConnection) {
             try {
@@ -89,6 +90,7 @@ public final class BaseConnectionListener extends AbstractConnectionListener {
     @Override
     public void authenticated (XMPPConnection connection, boolean resumed) {
         changeStatusAndNotify (CONNECTING, "Authentificating in chat room...");
+        log.info ("Joining chat room...");
         
         EntityBareJid jid = connectionService.prepareEntityJid ();
         MultiUserChat chat = MultiUserChatManager
@@ -103,12 +105,11 @@ public final class BaseConnectionListener extends AbstractConnectionListener {
                            .requestMaxStanzasHistory (10000)
                            .withPassword ("")
                            .build ());
-            Arrays.asList ("users", "tasks")
-                  .forEach (customIQProvider::query);
+            Arrays.asList ("users", "tasks").forEach (customIQProvider::query);
         } catch (XmppStringprepException | NotAMucServiceException 
               | XMPPErrorException | NoResponseException 
               | NotConnectedException | InterruptedException xse) {
-            changeStatusAndNotify (CONNECTED, xse.getMessage ());
+            changeStatusAndNotify (DISCONNECTED, xse.getMessage ());
             log.error ("Failed to join chat room", xse);
             //throw new IllegalStateException (xse);
         }

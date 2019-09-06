@@ -1,5 +1,15 @@
 language: java
+jdk: openjdk8
 sudo: false
+
+services:
+  - xvfb
+  
+before_install:
+  - sudo apt update
+  - sudo apt install openjfx
+  
+install: true
 
 before_deploy:
   - export TRAVIS_TAG='v'`mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | sed -n -e '/^\[.*\]/ !{ /^[0-9]/ { p; q } }'`

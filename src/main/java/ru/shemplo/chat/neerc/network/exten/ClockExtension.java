@@ -10,8 +10,10 @@ import org.xmlpull.v1.XmlPullParserException;
 import lombok.Getter;
 import lombok.ToString;
 import ru.shemplo.chat.neerc.network.iq.XMLUtils;
+import ru.shemplo.snowball.annot.Snowflake;
 
 @ToString
+@Snowflake
 public class ClockExtension extends AbsCustomExtensionElement {
 
     public static enum ClockStatus {
