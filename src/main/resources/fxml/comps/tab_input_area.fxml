@@ -15,6 +15,7 @@
            xmlns:fx="http://javafx.com/fxml"
            fx:id="input_area_root">
     <VBox>
+    	<!--
         <HBox spacing="8.0"
               alignment="CENTER_LEFT"
               VBox.vgrow="NEVER">
@@ -30,6 +31,7 @@
             <Button fx:id="clear_buffer"
                     text="x"/>
         </HBox>
+        -->
         <HBox spacing="8"
               VBox.vgrow="NEVER">
             <VBox.margin>

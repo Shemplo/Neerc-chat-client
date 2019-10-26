@@ -29,6 +29,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -87,7 +88,11 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
         
         SceneComponent.USERS_SCROLL_V.<ScrollPane> safe (scene).ifPresent (usersScrollVertical -> {
             usersScrollVertical.setBackground (Background.EMPTY);
-            usersScrollVertical.setBorder (Border.EMPTY);
+            Optional.of (usersScrollVertical.getParent ()).map (parent -> (VBox) parent).ifPresent (parent -> {
+                parent.setBorder (new Border (new BorderStroke (Color.LIGHTGRAY, BorderStrokeStyle.SOLID, 
+                    CornerRadii.EMPTY, new BorderWidths (0, 1d, 0, 0))));
+            });
+            
             usersScrollVertical.setOnScroll (se -> {
                 double hValue = usersScrollVertical.getVvalue (), delta = se.getDeltaY () * 1.5;
                 VBox users = SceneComponent.USERS_V.get (scene);
