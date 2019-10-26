@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Message.Type;
+import org.jivesoftware.smack.packet.StandardExtensionElement;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.shemplo.chat.neerc.annot.DestinationValue;
@@ -20,6 +21,7 @@ import ru.shemplo.chat.neerc.network.MessageService;
 import ru.shemplo.chat.neerc.network.TasksService;
 import ru.shemplo.chat.neerc.network.UsersService;
 import ru.shemplo.chat.neerc.network.exten.ClockExtension;
+import ru.shemplo.chat.neerc.network.exten.ClockExtension.ClockStatus;
 import ru.shemplo.chat.neerc.network.exten.editor.EditMessageExtension;
 import ru.shemplo.chat.neerc.network.iq.CustomIQProvider;
 import ru.shemplo.chat.neerc.network.iq.TasksListIQ;

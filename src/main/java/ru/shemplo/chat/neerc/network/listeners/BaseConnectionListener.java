@@ -102,7 +102,7 @@ public final class BaseConnectionListener extends AbstractConnectionListener {
             final Resourcepart resourcepart = Resourcepart.from (login);
             chat.join (chat.getEnterConfigurationBuilder (resourcepart)
                            //.requestHistorySince (new Date (0))
-                           .requestMaxStanzasHistory (10000)
+                           .requestMaxStanzasHistory (3000)
                            .withPassword ("")
                            .build ());
             Arrays.asList ("users", "tasks").forEach (customIQProvider::query);
