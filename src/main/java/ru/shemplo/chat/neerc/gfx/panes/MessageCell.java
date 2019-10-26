@@ -4,15 +4,17 @@ import java.time.format.DateTimeFormatter;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import ru.shemplo.chat.neerc.enities.MessageEntity;
 import ru.shemplo.chat.neerc.gfx.WindowManager;
-import ru.shemplo.chat.neerc.gfx.scenes.ClientScene;
-import ru.shemplo.chat.neerc.gfx.scenes.MainSceneHolder;
 import ru.shemplo.chat.neerc.network.UsersService;
 
 public class MessageCell extends ListCell <MessageEntity> {
@@ -30,12 +32,42 @@ public class MessageCell extends ListCell <MessageEntity> {
     public MessageCell () {
         setBackground (Background.EMPTY); 
         
+        /*
         setOnMouseClicked (me -> {
+            if (me.getButton ().equals (MouseButton.PRIMARY) && me.getClickCount () == 2) {
+                ContextMenu cm = new ContextMenu ();
+                
+                MenuItem mi = new MenuItem ("Copy to clipboard");
+                mi.setOnAction (ae -> {
+                    System.out.println ("copied to clipboard");
+                });
+                cm.getItems ().add (mi);
+                //cm.show (null);
+                //setContextMenu (cm);
+                //cm.show (manager.getSceneHolder ().getScene ().getWindow ());
+                cm.show (this, 100, 100);
+            }
             if (me.getClickCount () == 2) {
                 MainSceneHolder holder = (MainSceneHolder) 
                             ClientScene.MAIN.getHolder ();
                 holder.placeInBuffer (getItem ());
             }
+        });
+        */
+        
+        setOnContextMenuRequested (cme -> {
+            final ContextMenu cm = new ContextMenu ();
+            
+            MenuItem copyToClipboardMI = new MenuItem ("Copy to clipboard");
+            copyToClipboardMI.setOnAction (ae -> {
+                Clipboard cb = Clipboard.getSystemClipboard ();
+                ClipboardContent cc = new ClipboardContent ();
+                cc.putString (getItem ().getBody ());
+                cb.setContent (cc);
+            });
+            cm.getItems ().add (copyToClipboardMI);
+            
+            cm.show (this, cme.getScreenX (), cme.getScreenY ());
         });
     }
     

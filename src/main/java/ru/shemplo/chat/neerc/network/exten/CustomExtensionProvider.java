@@ -14,6 +14,7 @@ import org.xmlpull.v1.XmlPullParser;
 import ru.shemplo.chat.neerc.config.ConfigStorage;
 import ru.shemplo.chat.neerc.network.ConnectionService;
 import ru.shemplo.chat.neerc.network.exten.editor.EditMessageExtension;
+import ru.shemplo.snowball.annot.PostShaped;
 import ru.shemplo.snowball.annot.Snowflake;
 
 public class CustomExtensionProvider extends ExtensionElementProvider <AbsCustomExtensionElement> {
@@ -31,6 +32,7 @@ public class CustomExtensionProvider extends ExtensionElementProvider <AbsCustom
     static final EditMessageExtension edit = new EditMessageExtension ();
     static final ClockExtension clock = new ClockExtension ();
     
+    @PostShaped
     private void _initProvider () {
         // x / http://neerc.ifmo.ru/protocol/neerc#clock
         ProviderManager.addExtensionProvider (clock.getElementName (), 
