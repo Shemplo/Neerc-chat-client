@@ -125,7 +125,7 @@ public class MainSceneListener implements UserPresenceListener, TasksStatusListe
                     button.setGraphicTextGap (8.0);
                     return button;
                }).collect (Collectors.toList ());
-            Platform.runLater ( () -> line.getChildren ().addAll (buttons));
+            Platform.runLater (() -> line.getChildren ().addAll (buttons));
         });
     }
     

@@ -46,8 +46,8 @@ public class MessageInterpreter {
         return lines;
     }
     
-    private Label makeIconLabel (String emoji) {
-        Group icon = getIconWithHeight ("emoji/" + emoji, 20);
+    public Label makeIconLabel (String emoji, int size) {
+        Group icon = getIconWithHeight ("emoji/" + emoji, size);
         Label tmp = new Label ();
         tmp.setPadding (new Insets (0, 0, 0, 4));
         if (icon == null) {
@@ -165,7 +165,7 @@ public class MessageInterpreter {
             tokens.forEach (token -> {
                 if (token.matches (emojiPattern.pattern ())) {
                     token = token.substring (1, token.length () - 1);
-                    Label label = makeIconLabel (token);
+                    Label label = makeIconLabel (token, 20);
                     label.setPadding (insets);
                     
                     box.getChildren ().add (label);
