@@ -34,19 +34,6 @@ public class MessageCell extends ListCell <MessageEntity> {
         
         /*
         setOnMouseClicked (me -> {
-            if (me.getButton ().equals (MouseButton.PRIMARY) && me.getClickCount () == 2) {
-                ContextMenu cm = new ContextMenu ();
-                
-                MenuItem mi = new MenuItem ("Copy to clipboard");
-                mi.setOnAction (ae -> {
-                    System.out.println ("copied to clipboard");
-                });
-                cm.getItems ().add (mi);
-                //cm.show (null);
-                //setContextMenu (cm);
-                //cm.show (manager.getSceneHolder ().getScene ().getWindow ());
-                cm.show (this, 100, 100);
-            }
             if (me.getClickCount () == 2) {
                 MainSceneHolder holder = (MainSceneHolder) 
                             ClientScene.MAIN.getHolder ();

@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Message.Type;
-import org.jivesoftware.smack.packet.StandardExtensionElement;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.shemplo.chat.neerc.annot.DestinationValue;
@@ -21,7 +20,6 @@ import ru.shemplo.chat.neerc.network.MessageService;
 import ru.shemplo.chat.neerc.network.TasksService;
 import ru.shemplo.chat.neerc.network.UsersService;
 import ru.shemplo.chat.neerc.network.exten.ClockExtension;
-import ru.shemplo.chat.neerc.network.exten.ClockExtension.ClockStatus;
 import ru.shemplo.chat.neerc.network.exten.editor.EditMessageExtension;
 import ru.shemplo.chat.neerc.network.iq.CustomIQProvider;
 import ru.shemplo.chat.neerc.network.iq.TasksListIQ;
@@ -102,10 +100,11 @@ public class DefaultController {
             @DestinationValue ("time")    LocalDateTime time,
             @DestinationValue ("message") Message       message
     ) {
-        ClockExtension clock = message.getExtension (clockDummy.getElementName (), 
-                                                     clockDummy.getNamespace ());
-        messageService.synchronizeClock (clock.getTime (), clock.getTotal (), 
-                                                         clock.getStatus ());
+        ClockExtension clock = message.getExtension (
+            clockDummy.getElementName (), clockDummy.getNamespace ()
+        );
+        messageService.synchronizeClock (clock.getTime (), 
+            clock.getTotal (), clock.getStatus ());
     }
     
     @MessageRouteDestination (namespace = "extens\\.edimes\\..+", room = "neerc", 

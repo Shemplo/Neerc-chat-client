@@ -164,17 +164,26 @@ public class MainSceneHolder extends AbsSceneHolder implements ConnectionStatusL
         tasksChatTab.setDetachable (false);
         tasksChatTab.setClosable (false);
         
+        /*
         final String ratingName = "rating";
         DetachableTab ratingMonitorTab = new DetachableTab (ratingName);
         ratingMonitorTab.setContent (new RatingMonitor (this, ratingName));
         openedTabs.put (ratingName, ratingMonitorTab);
         ratingMonitorTab.setClosable (false);
+        */
+        
+        final String emojiName = "emoji";
+        DetachableTab emojiMonitorTab = new DetachableTab (emojiName);
+        emojiMonitorTab.setContent (new EmojiList (this, emojiName));
+        openedTabs.put (emojiName, emojiMonitorTab);
+        emojiMonitorTab.setClosable (false);
 
-        DetachableTabPane conversations = SceneComponent.CONVERSATIONS
-                                        . get (scene);
+        final DetachableTabPane conversations = 
+            SceneComponent.CONVERSATIONS.get (scene);
         conversations.getTabs ().add (publicChatTab);
         conversations.getTabs ().add (tasksChatTab);
-        conversations.getTabs ().add (ratingMonitorTab);
+        //conversations.getTabs ().add (ratingMonitorTab);
+        conversations.getTabs ().add (emojiMonitorTab);
         conversations.getSelectionModel ().clearAndSelect (0);
     }
     

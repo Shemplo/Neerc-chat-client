@@ -62,7 +62,7 @@ ListView .scroll-bar:horizontal .decrement-button {
 }
 
 .status-power {
-    /*-fx-text-fill: rgb(128, 0, 128);*/
+    -fx-text-fill: rgb(185, 0, 90);
     -fx-font-weight: bold;
 }
 
