@@ -47,8 +47,8 @@ public class MessageCell extends ListCell <MessageEntity> {
             
             MenuItem copyToClipboardMI = new MenuItem ("Copy to clipboard");
             copyToClipboardMI.setOnAction (ae -> {
-                Clipboard cb = Clipboard.getSystemClipboard ();
-                ClipboardContent cc = new ClipboardContent ();
+                final Clipboard cb = Clipboard.getSystemClipboard ();
+                final ClipboardContent cc = new ClipboardContent ();
                 cc.putString (getItem ().getBody ());
                 cb.setContent (cc);
             });

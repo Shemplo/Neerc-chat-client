@@ -9,6 +9,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -416,13 +418,21 @@ public class EmojiList extends AbsTabContent {
             emojiList.add ("zzz");
         });
         
+        final VBox content = new VBox (8.0);
+        
+        final Label info = new Label ("To copy emoji code to clipboard click on it with secondary mouse button");
+        VBox.setMargin (info, new Insets (0, 0, 0, 32.0));
+        content.getChildren ().add (info);
+        
         emojiListView = new ListView <> ();
         emojiListView.setCellFactory (__ -> new EmojiCell ());
         emojiListView.setBackground (Background.EMPTY);
         VBox.setVgrow (emojiListView, Priority.ALWAYS);
         emojiListView.editableProperty ().set (false);
         emojiListView.setItems (emojiList);
-        setContent (emojiListView);
+        
+        content.getChildren ().add (emojiListView);
+        setContent (content);
     }
 
     @Override
@@ -443,6 +453,13 @@ public class EmojiList extends AbsTabContent {
         
         public EmojiCell () {
             setBackground (Background.EMPTY);
+            
+            setOnContextMenuRequested (cme -> {
+                final Clipboard cb = Clipboard.getSystemClipboard ();
+                final ClipboardContent cc = new ClipboardContent ();
+                cc.putString (String.format (":%s:", getItem ()));
+                cb.setContent (cc);
+            });
         }
         
         @Override
