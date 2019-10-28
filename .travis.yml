@@ -1,5 +1,5 @@
 language: java
-jdk: openjdk8
+jdk: openjdk12
 sudo: false
 
 services:
@@ -26,7 +26,7 @@ deploy:
     branch: master
 
 script:
-  - mvn clean package cobertura:cobertura
+  - mvn clean package
 
 after_success:
   - echo "Build was successful. $TRAVIS_TEST_RESULT"

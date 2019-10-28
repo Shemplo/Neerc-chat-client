@@ -142,7 +142,7 @@ public class WindowManager extends Application
                 boolean listenerWasNull = sceneHolder == null;
                 this.sceneHolder = scene.getHolder ();
                 if (listenerWasNull) {
-                    synchronized (this) { this.notify (); }
+                    synchronized (this) { this.notifyAll (); }
                 }
             }
             
